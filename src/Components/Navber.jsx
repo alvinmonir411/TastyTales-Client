@@ -2,6 +2,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { NavLink } from "react-router";
 import { AuthContext } from "../Auth/AuthProvider";
 import { useContext } from "react";
+import { toast } from "react-toastify";
 
 const Navber = () => {
   const Navlinks = (
@@ -51,7 +52,19 @@ const Navber = () => {
       </NavLink>
     </>
   );
-  const { user } = useContext(AuthContext);
+  const { user,setuser, logout } = useContext(AuthContext);
+  const handlelogout = ()=>{
+    console.log('btn cliked')
+    logout()
+      .then((result) => {
+        setuser(null)
+        toast.success('your Are succesfully Logout')
+      })
+      .catch((error) => {
+       toast.error('some problem')
+      });
+      
+  }
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="navbar-start">
@@ -66,7 +79,7 @@ const Navber = () => {
             {Navlinks}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">daisyUI</a>
+        <a className="btn text-blue-500 font-semibold text-xl">TASTYTALES</a>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className=" px-1 flex justify-center gap-5">{Navlinks}</ul>
@@ -81,8 +94,11 @@ const Navber = () => {
             >
               <div className="w-10 rounded-full">
                 <img
-                  alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  alt="profile Image"
+                  src={
+                    user? user.photoURL :
+                    "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  }
                 />
               </div>
             </div>
@@ -92,13 +108,13 @@ const Navber = () => {
             >
               <li>
                 <a className="justify-between">
-                  Profile
+                  {user?.displayName || Profile}
                   <span className="badge">New</span>
                 </a>
               </li>
 
               <li>
-                <button>Logout</button>
+                <button onClick={handlelogout}>Logout</button>
               </li>
             </ul>
           </div>
