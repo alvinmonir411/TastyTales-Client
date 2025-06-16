@@ -1,15 +1,25 @@
 import React, { useEffect } from "react";
 import { createContext, useState } from "react";
 export const AuthContext = createContext();
-import {GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut} from 'firebase/auth'
+import {createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile} from 'firebase/auth'
 import { auth } from './../Firebase.init';
 const AuthProvider = ({ children }) => {
   const [user, setuser] = useState(null);
+
+
 
   // for google login
   const provider = new GoogleAuthProvider();
   const handlegooglelogin = () => {
     return signInWithPopup(auth, provider);
+  };
+  // login with emailpassword
+  const handleloginwitheamil = (email, password) => {
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
+  
+  const handlelogin = (email,password) => {
+    return signInWithEmailAndPassword(auth, email, password);
   };
 
   // handle logot
@@ -19,18 +29,14 @@ const AuthProvider = ({ children }) => {
 
   //  manage user
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const name = user.displayName
-        console.log(name)
-        setuser(user)
-      }
-    })
+   const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+     setuser(currentUser);
+   });
 
+return () => unsubscribe();
+  },[])
 
-  },[user])
-
-  const UserInfo = { setuser, user, handlegooglelogin, logout };
+  const UserInfo = { setuser,handleloginwitheamil, user,handlelogin, handlegooglelogin, logout };
   return (
     <AuthContext.Provider value={UserInfo}>{children}</AuthContext.Provider>
   );

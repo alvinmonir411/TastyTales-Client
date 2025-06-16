@@ -1,10 +1,12 @@
 import { GiHamburgerMenu } from "react-icons/gi";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { AuthContext } from "../Auth/AuthProvider";
 import { useContext } from "react";
 import { toast } from "react-toastify";
 
+
 const Navber = () => {
+const navigate = useNavigate()
   const Navlinks = (
     <>
       <NavLink
@@ -52,13 +54,15 @@ const Navber = () => {
       </NavLink>
     </>
   );
-  const { user,setuser, logout } = useContext(AuthContext);
+  const { user, setuser, logout } = useContext(AuthContext);
+
   const handlelogout = ()=>{
-    console.log('btn cliked')
+    
     logout()
       .then((result) => {
         setuser(null)
         toast.success('your Are succesfully Logout')
+       navigate('/')
       })
       .catch((error) => {
        toast.error('some problem')
@@ -104,11 +108,11 @@ const Navber = () => {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+              className="menu menu-sm dropdown-content bg-base-10\0 rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
               <li>
                 <a className="justify-between">
-                  {user?.displayName || Profile}
+                  {user?.displayName || 'Profile'}
                   <span className="badge">New</span>
                 </a>
               </li>

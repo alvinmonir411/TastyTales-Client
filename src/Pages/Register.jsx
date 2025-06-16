@@ -1,11 +1,17 @@
 import React, { use } from "react";
 import { BsGoogle } from "react-icons/bs";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { AuthContext } from "../Auth/AuthProvider";
 import { toast } from "react-toastify";
+import { updateProfile } from "firebase/auth";
 
-const Register = () => {
-  const {handlegooglelogin,user,setuser}= use(AuthContext)
+
+const Register = () =>
+{
+  const navigate = useNavigate();
+  const { handlegooglelogin, setuser, handleloginwitheamil, updtprofile } =
+    use(AuthContext); // useContext, not use()
+
   const handleregister = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -14,22 +20,40 @@ const Register = () => {
     const password = form.Password.value;
     const photoUrl = form.Photo_Url.value;
 
-    const userInfo = { name, email, password, photoUrl };
-    console.log(userInfo);
+    handleloginwitheamil(email, password)
+      .then((data) => {
+        const user = data.user;
+        updateProfile(user, {
+          displayName: name,
+          photoURL: photoUrl,
+        })
+          .then(() => {
+            setuser({ ...user, displayName: name, photoURL: photoUrl });
+            toast.success(`Welcome ${name}`);
+            navigate("/");
+          })
+          .catch((error) => {
+            toast.error("Profile update failed");
+            console.log(error.message);
+          });
+      })
+      .catch((error) => {
+        toast.error("Something went wrong");
+        console.log(error.message);
+      });
   };
 
-  // google login
   const googlelogin = () => {
     handlegooglelogin()
-      .then(data => {
-        setuser(data.user)
-     toast.success(`welcome ${data.user?.displayName}`);
+      .then((data) => {
+        setuser(data.user);
+        toast.success(`Welcome ${data.user?.displayName}`);
+        navigate("/");
       })
-      .catch(error => {
-      toast.error('something went log')
-    })
+      .catch((error) => {
+        toast.error("Something went wrong");
+      });
   };
-
   return (
     <div>
       <div className="card mx-auto bg-base-100 mt-10 w-full max-w-sm shrink-0 shadow-2xl">
@@ -58,7 +82,7 @@ const Register = () => {
             />
             <label className="label">Photo_Url</label>
             <input
-              type="password"
+              type="url"
               name="Photo_Url"
               className="input"
               placeholder="Photo Url"
@@ -66,7 +90,7 @@ const Register = () => {
             <div>
               <a className="link link-hover">Forgot password?</a>
             </div>
-            <button type="submite" className="btn btn-neutral mt-4">
+            <button type="submit" className="btn btn-neutral mt-4">
               Login
             </button>
           </form>
