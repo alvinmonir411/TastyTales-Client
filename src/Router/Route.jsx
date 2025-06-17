@@ -5,6 +5,7 @@ import Register from "../Pages/Register";
 import AddRecipe from "../Pages/AddRecipe";
 import PrivetRout from "../PrivetRoute/PrivetRout";
 import Allrecipe from "../Pages/Allrecipe";
+import Home from './../Root/Home/Home';
 
 export const router = createBrowserRouter([
   {
@@ -12,10 +13,16 @@ export const router = createBrowserRouter([
     Component: Root,
     children: [
       {
+        index: true,
+        Component:Home
+
+
+    },
+      {
         path: "addrecipes",
         element: <PrivetRout>
-<AddRecipe/>
-</PrivetRout>,
+          <AddRecipe/>
+          </PrivetRout>,
       },
       {
         path: "Allrecipe",

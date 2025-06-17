@@ -4,8 +4,9 @@ import { Outlet } from "react-router";
 const Root = () => {
   return (
     <div>
-      
+
       <Navber />
+      
       <Outlet />
     </div>
   );
