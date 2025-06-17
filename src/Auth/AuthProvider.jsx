@@ -5,7 +5,7 @@ import {createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, 
 import { auth } from './../Firebase.init';
 const AuthProvider = ({ children }) => {
   const [user, setuser] = useState(null);
-
+  const [loading,setloading] = useState(true)
 
 
   // for google login
@@ -31,12 +31,21 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
      setuser(currentUser);
+     setloading(false)
    });
 
 return () => unsubscribe();
   },[])
 
-  const UserInfo = { setuser,handleloginwitheamil, user,handlelogin, handlegooglelogin, logout };
+  const UserInfo = {
+    setuser,
+    handleloginwitheamil,
+    user,
+    handlelogin,
+    handlegooglelogin,
+    logout,loading,
+    setloading,
+  };
   return (
     <AuthContext.Provider value={UserInfo}>{children}</AuthContext.Provider>
   );

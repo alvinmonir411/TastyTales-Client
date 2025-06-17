@@ -10,7 +10,7 @@ const Register = () =>
 {
   const navigate = useNavigate();
   const { handlegooglelogin, setuser, handleloginwitheamil, updtprofile } =
-    use(AuthContext); // useContext, not use()
+    use(AuthContext);
 
   const handleregister = (e) => {
     e.preventDefault();
@@ -88,7 +88,12 @@ const Register = () =>
               placeholder="Photo Url"
             />
             <div>
-              <a className="link link-hover">Forgot password?</a>
+              <a className="link link-hover">Forgot password?</a>  <NavLink
+                                to="/login"
+                                className="link link-hover text-blue-500 font-semibold"
+                              >
+                                log in Here
+                              </NavLink>
             </div>
             <button type="submit" className="btn btn-neutral mt-4">
               Login
