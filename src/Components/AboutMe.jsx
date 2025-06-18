@@ -3,12 +3,12 @@ import { motion } from "framer-motion";
 
 const AboutMe = () => {
   return (
-    <div className="container mx-auto my-28 px-5 flex flex-col lg:flex-row justify-center items-center gap-10">
+    <div className="container mx-auto overflow-hidden my-28 px-5 flex flex-col lg:flex-row justify-center items-center gap-10">
       {/* Image Section with premium animation */}
       <motion.div
         initial={{ rotate: 180, scale: 0.5, opacity: 0, filter: "blur(8px)" }}
         whileInView={{ rotate: 0, scale: 1, opacity: 1, filter: "blur(0px)" }}
-        viewport={{ once: true }}
+      
         transition={{ duration: 1.2, ease: "easeInOut" }}
         className="w-full max-w-md"
       >
@@ -23,8 +23,8 @@ const AboutMe = () => {
       <motion.div
         initial={{ opacity: 0, x: 100 }}
         whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
         transition={{ duration: 1 }}
+     
         className="flex flex-col gap-6 max-w-xl"
       >
         <p className="uppercase text-sm tracking-widest text-gray-600 font-semibold">
