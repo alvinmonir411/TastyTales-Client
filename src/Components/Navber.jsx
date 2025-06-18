@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router";
 import { AuthContext } from "../Auth/AuthProvider";
 import { useContext } from "react";
 import { toast } from "react-toastify";
+import { motion } from 'framer-motion';
 
 const Navber = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const Navber = () => {
           }
           end
         >
-          Allrecipe
+          All-Recipe
         </NavLink>
       </li>
       <li>
@@ -88,7 +89,12 @@ const Navber = () => {
   };
 
   return (
-    <div className="navbar sticky top-0 bg-transparent backdrop-blur-md shadow-md z-50">
+    <motion.div
+    initial={{ opacity: 0, y: -200 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 1 }}
+      
+      className="navbar sticky top-0  bg-transparent  backdrop-blur-md shadow-lg z-50">
       <div className="navbar-start">
         {/* Mobile Dropdown */}
         <div className="dropdown">
@@ -160,7 +166,7 @@ const Navber = () => {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
