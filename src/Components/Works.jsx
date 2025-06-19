@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const Works = () => {
   return (
-    <div className="hidden  bg-[#cfac2d] w-full md:flex items-center justify-center">
+    <div className="  bg-[#cfac2d] w-full md:flex items-center justify-center">
       <div className="flex flex-col-reverse md:flex-row items-center justify-center w-full py-10 px-4 md:px-0 max-w-screen-xl">
         {/* Text Content */}
         <motion.div
