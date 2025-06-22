@@ -6,6 +6,11 @@ import AddRecipe from "../Pages/AddRecipe";
 import PrivetRout from "../PrivetRoute/PrivetRout";
 import Allrecipe from "../Pages/Allrecipe";
 import Home from './../Root/Home/Home';
+import Admin from "../Dashbord/admin";
+import DashbordHome from "../Dashbord/DashbordHome";
+import Deteils from "../Components/Deteils";
+import BuyNow from "../Pages/BuyNow";
+import Mycard from "../Pages/Mycard";
 
 export const router = createBrowserRouter([
   {
@@ -14,21 +19,32 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component:Home
-
-
-    },
+        Component: Home,
+      },
       {
         path: "addrecipes",
-        element: <PrivetRout>
-          <AddRecipe/>
-          </PrivetRout>,
+        element: (
+          <PrivetRout>
+            <AddRecipe />
+          </PrivetRout>
+        ),
       },
       {
         path: "Allrecipe",
-        Component:Allrecipe
+        Component: Allrecipe,
       },
-      
+      {
+        path: "recipedeteils/:id",
+        Component: Deteils,
+      },
+      {
+        path: "buynow/:id",
+        Component: BuyNow,
+      },
+      {
+        path: "mycard",
+        Component:Mycard
+      },
     ],
   },
   {
@@ -38,5 +54,15 @@ export const router = createBrowserRouter([
   {
     path: "/register",
     Component: Register,
+  },
+  {
+    path: "/dashbord",
+    element: <Admin />,
+    children: [
+      {
+        index: true,
+        element: <DashbordHome />,
+      },
+    ],
   },
 ]);
