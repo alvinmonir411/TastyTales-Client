@@ -15,7 +15,7 @@ const RecipeCard = ({ recipe, recipes }) => {
             duration: 0.6,
             ease: [0.22, 1, 0.36, 1],
           }}
-          whileHover={{
+          animate={{
             scale: 1.03,
             boxShadow:
               "0 20px 30px rgba(0,0,0,0.15), 0 8px 15px rgba(0,0,0,0.1)",

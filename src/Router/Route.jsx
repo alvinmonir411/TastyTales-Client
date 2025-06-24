@@ -11,6 +11,8 @@ import DashbordHome from "../Dashbord/DashbordHome";
 import Deteils from "../Components/Deteils";
 import BuyNow from "../Pages/BuyNow";
 import Mycard from "../Pages/Mycard";
+import Addpercel from "../Pages/Dashbord/Addpercel";
+
 
 export const router = createBrowserRouter([
   {
@@ -43,7 +45,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "mycard",
-        Component:Mycard
+        Component: Mycard,
       },
     ],
   },
@@ -62,6 +64,15 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <DashbordHome />,
+      }, {
+        
+        path: "dashbord",
+        Component:DashbordHome
+      },
+      {
+        path: "Addpercel",
+        Component: Addpercel,
+        loader : () => fetch('/warehouses.json')
       },
     ],
   },
