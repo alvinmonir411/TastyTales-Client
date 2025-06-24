@@ -12,6 +12,9 @@ import Deteils from "../Components/Deteils";
 import BuyNow from "../Pages/BuyNow";
 import Mycard from "../Pages/Mycard";
 import Addpercel from "../Pages/Dashbord/Addpercel";
+import Allparcle from "../Dashbord/Card/Allparcle";
+import MyParcel from "../Dashbord/Card/MyParcel";
+// import MyParcel from "../Dashbord/Card/MyParcel";
 
 
 export const router = createBrowserRouter([
@@ -64,15 +67,24 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <DashbordHome />,
-      }, {
-        
+      },
+      {
         path: "dashbord",
-        Component:DashbordHome
+        Component: DashbordHome,
       },
       {
         path: "Addpercel",
         Component: Addpercel,
-        loader : () => fetch('/warehouses.json')
+        loader: () => fetch("/warehouses.json"),
+      },
+      {
+        path: "AllParcel",
+        Component: Allparcle,
+        loader: () => fetch(`${import.meta.env.VITE_URL}parcels`),
+      },
+      {
+        path: "myparcle",
+        Component: MyParcel,
       },
     ],
   },

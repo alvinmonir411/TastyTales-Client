@@ -1,28 +1,38 @@
-import React from "react";
-import Navber from "../Components/Navber";
-import { Outlet } from "react-router"; 
-import AdminSidebar from "./AdminSidebar";
-import { motion } from "framer-motion";
+import React from 'react'
+import AdminSidebar from './AdminSidebar';
+import { Outlet } from 'react-router';
+import { BiMenu } from 'react-icons/bi';
+import Navber from '../Components/Navber';
 
-const Admin = () => {
+const admin = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navber />
-      <div className="flex">
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7 }}
-          className="w-64 border-r bg-white shadow-md sticky top-0 h-screen"
-        >
-          <AdminSidebar />
-        </motion.div>
-        <main className="flex-1 p-6 overflow-y-auto">
-          <Outlet />
-        </main>
+    <div className='relative'>
+      <div className="drawer lg:drawer-open w-full">
+        <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+        <div className="drawer-content  items-center justify-center overflow-hidden">
+       
+       <Outlet/>
+          <label
+            htmlFor="my-drawer-2"
+            className="btn btn-primary drawer-button lg:hidden absolute top-0 left-0"
+          >
+          <BiMenu/>
+          </label>
+        </div>
+        <div className="drawer-side">
+          <label
+            htmlFor="my-drawer-2"
+            aria-label="close sidebar"
+            className="drawer-overlay"
+          ></label>
+          <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+            {/* Sidebar content here */}
+      <AdminSidebar/>
+          </ul>
+        </div>
       </div>
     </div>
   );
-};
+}
 
-export default Admin;
+export default admin

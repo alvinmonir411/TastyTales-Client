@@ -28,9 +28,7 @@ const [sellar, setSeller] = useState([]);
 
   return (
     <motion.div
-      // initial={{ opacity: 0, y: -20 }}
-      // whileInView={{ opacity: 1, y: 0 }}
-      // transition={{ duration: 0.5 }}
+      
       className="w-[80vw] m-10  mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-center items-center gap-10 capitalize"
     >
       {/* for total recipe */}

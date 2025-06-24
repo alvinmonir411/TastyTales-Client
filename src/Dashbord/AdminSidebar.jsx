@@ -1,54 +1,97 @@
-import React, { useState } from "react";
-import { NavLink, Outlet } from "react-router";
+import React, { use } from "react";
+import { NavLink } from "react-router";
+import { AuthContext } from "../Auth/AuthProvider";
 
 const AdminSidebar = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const navLinkStyle = ({ isActive }) =>
-    `block px-4 py-2 rounded transition font-medium ${
-      isActive ? "bg-blue-500 text-white" : "text-gray-800 hover:bg-blue-200"
-    }`;
-
+  const {user}= use(AuthContext)
   return (
-    <div className="flex h-screen">
-      {/* Toggle button for mobile */}
-      <div className="md:hidden absolute top-10 left-4 z-50">
-        <button
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="bg-blue-600 text-white px-3 py-2 rounded"
-        >
-          ☰ Menu
-        </button>
-      </div>
-
-      {/* Sidebar */}
-      <aside
-        className={`fixed md:static top-0 left-0 h-full w-64 bg-gray-100 p-6 shadow-lg z-40 transform transition-transform duration-300 ease-in-out ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0`}
-      >
-        <h2 className="text-xl font-bold mb-8 text-blue-600">Admin Panel</h2>
-        <nav className="space-y-4">
-          <NavLink to="dashbord" className={navLinkStyle}>
+    <aside className="w-64 bg-base-200 text-base-content overflow-y-hidden-hidden  p-5 ">
+      <h2 className="text-2xl font-bold text-blue-600 mb-6">Admin Panel</h2>
+      <ul className="menu space-y-1">
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "text-blue-500 underline" : ""
+            }
+            to="/"
+          >
             🏠 Home
           </NavLink>
-          <NavLink to="totalRecipes" className={navLinkStyle}>
+        </li>
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "text-blue-500 underline" : ""
+            }
+            to="dashbord"
+          >
+            🏠 Dashbord Home
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "text-blue-500 underline" : ""
+            }
+            to="totalRecipes"
+          >
             📋 Total Recipes
           </NavLink>
-          <NavLink to="totalUser" className={navLinkStyle}>
+        </li>
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "text-blue-500 underline" : ""
+            }
+            to="totalUser"
+          >
             👥 Total Users
           </NavLink>
-          <NavLink to="/myrecipe" className={navLinkStyle}>
+        </li>
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "text-blue-500 underline" : ""
+            }
+            to="/myrecipe"
+          >
             🍳 My Recipe
           </NavLink>
-          <NavLink to="Addpercel" className={navLinkStyle}>
+        </li>
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "text-blue-500 underline" : ""
+            }
+            to="Addpercel"
+          >
             📦 Add Parcel
           </NavLink>
-        </nav>
-      </aside>
-
-    
-    </div>
+        </li>
+        {user?.email === "alvinmonir411@gmail.com" && (
+          <li>
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? "text-blue-500 underline" : ""
+              }
+              to="AllParcel"
+            >
+              📦 All Parcel
+            </NavLink>
+          </li>
+        )}
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "text-blue-500 underline" : ""
+            }
+            to="myparcle"
+          >
+            📦 My Parcle
+          </NavLink>
+        </li>
+      </ul>
+    </aside>
   );
 };
 

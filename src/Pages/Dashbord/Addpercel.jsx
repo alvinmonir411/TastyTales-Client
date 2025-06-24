@@ -1,123 +1,293 @@
-import React, { use } from 'react'
-import { useForm } from 'react-hook-form';
-import { AuthContext } from '../../Auth/AuthProvider';
-import { useLoaderData } from 'react-router';
+import React, { useContext } from "react";
+import { useForm } from "react-hook-form";
+import { AuthContext } from "../../Auth/AuthProvider";
+import { useLoaderData } from "react-router";
+import Swal from "sweetalert2";
+import axios from "axios";
 
+const AddParcel = () => {
+  const { user } = useContext(AuthContext);
+  const datas = useLoaderData();
 
-
-
-const Addpercel = () => {
-  const { user } = use(AuthContext)
-  const datas = useLoaderData()
-  
   const regions = [...new Set(datas?.map((data) => data.region))];
-  const districts = [...new Set(datas?.map((data) => data.district))];
-  const { register, watch, handleSubmit } = useForm()
-  
-  const percelType = watch("percelType");
-  const selectregion = watch('region')
-const seletedistric = watch("district");
-  const filterdistric = datas?.filter(item => item.region === selectregion).map(items => items.district)
 
+  const { register, watch, handleSubmit, reset } = useForm();
 
+  const type = watch("type");
+  const weight = parseFloat(watch("weight")) || 0;
+  const senderRegion = watch("sender_region");
+  const senderDistrict = watch("sender_district");
+  const receiverRegion = watch("receiver_region");
+  const receiverDistrict = watch("receiver_district");
 
-  const filterservicecenter = datas?.find(
-    (item) => item.district === seletedistric
-  );
-  
-  const onSubmit = (data) => {
-    console.log(data)
-  }
+  const senderCenters = datas.filter((d) => d.region === senderRegion);
+  const receiverCenters = datas.filter((d) => d.region === receiverRegion);
+
+  const calculateCost = () => {
+    const sameDistrict = senderDistrict === receiverDistrict;
+    if (type === "document") {
+      return sameDistrict ? 60 : 80;
+    }
+    if (weight <= 3) {
+      return sameDistrict ? 110 : 150;
+    }
+    let base = sameDistrict ? 110 : 150;
+    let extra = (weight - 3) * 40;
+    if (!sameDistrict) extra += 40;
+    return base + extra;
+  };
+
+  const onSubmit = async (data) => {
+    const cost = calculateCost();
+
+    const result = await Swal.fire({
+      title: `Estimated Cost: ৳${cost}`,
+      html: `
+        <div class="text-left">
+          <p><strong>Parcel Type:</strong> ${type}</p>
+          <p><strong>Weight:</strong> ${weight || "N/A"} kg</p>
+          <p><strong>From:</strong> ${senderDistrict}</p>
+          <p><strong>To:</strong> ${receiverDistrict}</p>
+          <p><strong>Delivery Cost:</strong> <span class="text-blue-600 font-bold">৳${cost}</span></p>
+        </div>
+      `,
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonText: "Confirm",
+      cancelButtonText: "Cancel",
+    });
+
+    if (result.isConfirmed) {
+      const finalData = {
+        ...data,
+        tracking_id: "TRK" + Date.now(),
+        sender_email: user?.email,
+        delivery_cost: cost,
+        payment_status: "unpaid",
+        delivery_status: "pending",
+        created_by: user?.email,
+        creation_date: new Date().toISOString(),
+      };
+      try {
+        const res = await axios.post(
+          `${import.meta.env.VITE_URL}addparcel`,
+          finalData
+        );
+        if (res.data.insertedId) {
+          reset();
+          Swal.fire("Success", "Parcel booked successfully!", "success");
+        }
+      } catch (error) {
+        Swal.fire("Error", "Failed to book parcel.", "error");
+      }
+    }
+  };
+
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)} className="max-w-7xl capitalize">
-        <h1 className="text-4xl text-blue-500 font-bold text-center">
-          Add your perlce{" "}
-        </h1>
-        {/* for percel info */}
-        <fieldset className="border shadow-4xl flex justify-around p-5 items-center gap-5">
-          <legend className="card-title">percle info</legend>
-          <div className="flex flex-col gap-3 capitalize">
-            <label className="card-title">titel</label>
-            <input
-              type="text"
-              className="p-2 border border-gray-300"
-              {...register("titel", { required: "please enter your name" })}
-              placeholder="percle title"
-            />
-          </div>
-          <div className="flex flex-col gap-5 capitalize">
-            <label className="card-title">document type</label>
-            <select
-              className="border border-gray-300 p-2"
-              {...register("percelType")}
-            >
-              <option value="document">document</option>
-              <option value="Nondocument">Nondocument</option>
-            </select>
-            {percelType === "Nondocument" && (
-              <div className="flex flex-col gap-2">
-                <label>Document Weight</label>
-                <input
-                  type="text"
-                  className="border border-gray-300 p-2"
-                  {...register("waight", {
-                    required:
-                      percelType === "Nondocument" && "Please enter weight",
-                  })}
-                  placeholder="Enter weight in kg"
-                />
-              </div>
-            )}
-          </div>
-        </fieldset>
-        {/* for sender info  */}
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="p-5 max-w-5xl mx-auto space-y-12"
+    >
+      <h1 className="text-3xl font-bold text-center mb-1">Book Your Parcel</h1>
+      <p className="text-center text-gray-600 mb-6">
+        Door to Door Parcel Delivery
+      </p>
 
-        <fieldset className="border p-5 md:grid md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-10">
-          <legend className="card-title">Sender Info</legend>
-          <div className="flex flex-col gap-2 w-[200px]">
-            <label className="card-title">Sender Name</label>
+      {/* Parcel Info */}
+      <fieldset className="border rounded-lg p-6 shadow-md space-y-6">
+        <legend className="font-bold text-xl px-2">Parcel Info</legend>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <select
+            {...register("type", { required: "Parcel type is required" })}
+            className="input input-bordered w-full"
+          >
+            <option value="">Select Parcel Type</option>
+            <option value="document">Document</option>
+            <option value="non-document">Non-Document</option>
+          </select>
+          <input
+            {...register("title", { required: "Title is required" })}
+            placeholder="Title"
+            className="input input-bordered w-full"
+          />
+          {type === "non-document" && (
             <input
-              className="border border-gray-300 w-full"
-              type="text"
-              defaultValue={user?.displayName}
-              readOnly
+              type="number"
+              step="0.01"
+              min="0"
+              {...register("weight", {
+                required: "Weight is required for Non-Document",
+              })}
+              placeholder="Weight in kg"
+              className="input input-bordered w-full"
             />
-          </div>
-          <div className="flex flex-col  gap-2 w-[100px]">
-            <label className="card-title">regioun</label>
-            <select {...register("region")} className="border ">
-              {regions?.map((region) => (
-                <option value={region} key={region}>
-                  {region}
-                </option>
-              ))}
-            </select>
-          </div>{" "}
-          <div className="flex flex-col  gap-2 w-[100px]">
-            <label className="card-title">Distric</label>
-            <select {...register("district")} className="border ">
-              {filterdistric?.map((district) => (
-                <option value={district} key={district}>
-                  {district}
-                </option>
-              ))}
-            </select>
-          </div>
-          <select {...register("covered_area")} className="border">
-            {filterservicecenter?.covered_area?.map((area) => (
-              <option value={area} key={area}>
-                {area}
+          )}
+        </div>
+      </fieldset>
+
+      {/* Sender Info */}
+      <fieldset className="border rounded-lg p-6 shadow-md space-y-6">
+        <legend className="font-bold text-xl px-2">Sender Info</legend>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <input
+            readOnly
+            value={user?.displayName || ""}
+            className="input input-bordered w-full bg-gray-100"
+            placeholder="Sender Name"
+          />
+          <input
+            {...register("sender_contact", {
+              required: "Sender contact is required",
+            })}
+            placeholder="Sender Contact"
+            className="input input-bordered w-full"
+          />
+          <select
+            {...register("sender_region", {
+              required: "Sender region is required",
+            })}
+            className="input input-bordered w-full"
+          >
+            <option value="">Select Region</option>
+            {regions.map((r) => (
+              <option key={r} value={r}>
+                {r}
               </option>
             ))}
           </select>
-        </fieldset>
-        <button className="btn btn-primary mt-10" type="submit">
-          submit
-        </button>
-      </form>
-    </div>
-  );
-}
+          <select
+            {...register("sender_district", {
+              required: "Sender district is required",
+            })}
+            className="input input-bordered w-full"
+          >
+            <option value="">Select District</option>
+            {senderCenters.map((d) => (
+              <option key={d.district} value={d.district}>
+                {d.district}
+              </option>
+            ))}
+          </select>
+          <select
+            {...register("sender_center", {
+              required: "Sender center is required",
+            })}
+            className="input input-bordered w-full"
+          >
+            <option value="">Select Service Center</option>
+            {datas
+              .find((d) => d.district === senderDistrict)
+              ?.covered_area?.map((a) => (
+                <option key={a} value={a}>
+                  {a}
+                </option>
+              ))}
+          </select>
+          <textarea
+            {...register("sender_address", {
+              required: "Sender address is required",
+            })}
+            placeholder="Sender Address"
+            className="textarea textarea-bordered w-full resize-none"
+            rows={3}
+          />
+          <textarea
+            {...register("pickup_instruction", {
+              required: "Pickup instruction is required",
+            })}
+            placeholder="Pickup Instruction"
+            className="textarea textarea-bordered w-full resize-none"
+            rows={3}
+          />
+        </div>
+      </fieldset>
 
-export default Addpercel
+      {/* Receiver Info */}
+      <fieldset className="border rounded-lg p-6 shadow-md space-y-6">
+        <legend className="font-bold text-xl px-2">Receiver Info</legend>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <input
+            {...register("receiver_name", {
+              required: "Receiver name is required",
+            })}
+            placeholder="Receiver Name"
+            className="input input-bordered w-full"
+          />
+          <input
+            {...register("receiver_contact", {
+              required: "Receiver contact is required",
+            })}
+            placeholder="Receiver Contact"
+            className="input input-bordered w-full"
+          />
+          <select
+            {...register("receiver_region", {
+              required: "Receiver region is required",
+            })}
+            className="input input-bordered w-full"
+          >
+            <option value="">Select Region</option>
+            {regions.map((r) => (
+              <option key={r} value={r}>
+                {r}
+              </option>
+            ))}
+          </select>
+          <select
+            {...register("receiver_district", {
+              required: "Receiver district is required",
+            })}
+            className="input input-bordered w-full"
+          >
+            <option value="">Select District</option>
+            {receiverCenters.map((d) => (
+              <option key={d.district} value={d.district}>
+                {d.district}
+              </option>
+            ))}
+          </select>
+          <select
+            {...register("receiver_center", {
+              required: "Receiver center is required",
+            })}
+            className="input input-bordered w-full"
+          >
+            <option value="">Select Service Center</option>
+            {datas
+              .find((d) => d.district === receiverDistrict)
+              ?.covered_area?.map((a) => (
+                <option key={a} value={a}>
+                  {a}
+                </option>
+              ))}
+          </select>
+          <textarea
+            {...register("receiver_address", {
+              required: "Receiver address is required",
+            })}
+            placeholder="Receiver Address"
+            className="textarea textarea-bordered w-full resize-none"
+            rows={3}
+          />
+          <textarea
+            {...register("delivery_instruction", {
+              required: "Delivery instruction is required",
+            })}
+            placeholder="Delivery Instruction"
+            className="textarea textarea-bordered w-full resize-none"
+            rows={3}
+          />
+        </div>
+      </fieldset>
+
+      <button
+        type="submit"
+        className="btn btn-primary w-full py-3 text-lg font-semibold"
+      >
+        Submit
+      </button>
+    </form>
+  );
+};
+
+export default AddParcel;
