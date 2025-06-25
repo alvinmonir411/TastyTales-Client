@@ -39,17 +39,18 @@
 
 
 
-📦 Delivery Cost Logic
-Parcel Type	Weight	Within City	Outside City/District
-Document	Any	৳60	৳80
-Non-Document	Up to 3kg	৳110	৳150
-Non-Document	Over 3kg	৳110 + ৳40/kg	৳150 + ৳40/kg + ৳40 extra
+| **Parcel Type** | **Weight** | **Within City** | **Outside City/District**       |
+| --------------- | ---------- | --------------- | ------------------------------- |
+| Document        | Any        | ৳60             | ৳80                             |
+| Non-Document    | Up to 3kg  | ৳110            | ৳150                            |
+| Non-Document    | Over 3kg   | ৳110 + ৳40/kg   | ৳150 + ৳40/kg + ৳40 (extra fee) |
+
 
 Delivery cost is dynamically calculated on form submission and shown via Toast before final confirmation.
 ✍️ Author
 Moniruzzaman (Alvin Monir)
 📧 alvinmonir411@gmail.com
-🔗 LinkedIn Profile
+
 
 📄 License
 This project is licensed for educational and portfolio use. For production or commercial use, please contact the author.
