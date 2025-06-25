@@ -1,23 +1,20 @@
-import React, { use } from 'react'
-import { AuthContext } from '../Auth/AuthProvider'
-import { Navigate, useLocation } from 'react-router';
-import { form } from 'framer-motion/client';
+import React, { useContext } from "react";
+import { AuthContext } from "../Auth/AuthProvider";
+import { Navigate, useLocation } from "react-router";
 
-const PrivetRout = ({ children }) => {
-  const { user, loading } = use(AuthContext);
-  const location = useLocation()
+const PrivateRoute = ({ children }) => {
+  const { user, loading } = useContext(AuthContext);
+  const location = useLocation();
+
   if (loading) {
-    return <p>loading ....</p>;
+    return <p>Loading....</p>;
   }
+
   if (user) {
-    return children
-
+    return children;
   }
 
-  return <Navigate to="/login" state={{form:location}} replace></Navigate>
-
-
-  return <div></div>;
+  return <Navigate to="/login" state={{ from: location.pathname }} replace />;
 };
 
-export default PrivetRout
+export default PrivateRoute;

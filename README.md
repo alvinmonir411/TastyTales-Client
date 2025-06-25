@@ -1,12 +1,61 @@
-# React + Vite
+# Tasty Tales 🍽️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Tasty Tales** is a dynamic recipe-sharing platform that allows users to explore, contribute, and manage food recipes. In addition to recipe features, it includes an admin dashboard and parcel management system for handling deliveries of food products or ingredients.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- 🔐 **User Authentication** using Firebase
+- 🧑‍🍳 **Add and View Recipes**
+- 📄 **Recipe Details with Dynamic Routing**
+- 🛒 **Buy Now** and **My Cart** Features
+- 🧑‍💼 **Admin Dashboard**:
+  - Dashboard overview
+  - Total Recipes & Users
+  - My Recipes view
+  - Add Parcel with cost calculator
+- 📦 **Add Parcel Form** with:
+  - Pickup & Delivery location fields
+  - Dynamic cost calculation based on parcel type, service center, and weight
+  - Confirmation via Toast notification
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🧰 Tech Stack
+
+- **React.js**
+- **React Router DOM v6**
+- **Firebase Authentication**
+- **Tailwind CSS**
+- **Framer Motion**
+- **Context API**
+- **React Toastify**
+- **Vite**
+- **JSON (Static data)**
+
+---
+
+
+
+
+📦 Delivery Cost Logic
+Parcel Type	Weight	Within City	Outside City/District
+Document	Any	৳60	৳80
+Non-Document	Up to 3kg	৳110	৳150
+Non-Document	Over 3kg	৳110 + ৳40/kg	৳150 + ৳40/kg + ৳40 extra
+
+Delivery cost is dynamically calculated on form submission and shown via Toast before final confirmation.
+✍️ Author
+Moniruzzaman (Alvin Monir)
+📧 alvinmonir411@gmail.com
+🔗 LinkedIn Profile
+
+📄 License
+This project is licensed for educational and portfolio use. For production or commercial use, please contact the author.
+
+vbnet
+Copy
+Edit
+
+Let me know if you want this saved as a `.md` file or need help uploading it to GitHub.
