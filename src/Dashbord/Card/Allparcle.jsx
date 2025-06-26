@@ -1,11 +1,13 @@
-import React from "react";
-import { useLoaderData } from "react-router";
+import React, { useState } from "react";
+import { useLoaderData } from "react-router"; 
 import { motion, AnimatePresence } from "framer-motion";
 import Swal from "sweetalert2";
 import { FiEdit, FiEye, FiTrash2 } from "react-icons/fi";
+import axios from "axios"; // fixed axios import
 
 const Allparcle = () => {
-  const parcels = useLoaderData();
+  const loadedParcels = useLoaderData();
+  const [parcels, setParcels] = useState(loadedParcels || []);
 
   const handleEdit = (id) => {
     Swal.fire({
@@ -35,15 +37,22 @@ const Allparcle = () => {
     });
 
     if (result.isConfirmed) {
-      Swal.fire("Deleted!", "The parcel has been deleted.", "success");
-      console.log("Deleted parcel id:", id);
+      axios
+        .delete(`${import.meta.env.VITE_URL}parcle/${id}`) 
+        .then(() => {
+          setParcels(parcels.filter((parcel) => parcel._id !== id));
+          Swal.fire("Deleted!", "Your parcel has been deleted.", "success");
+        })
+        .catch(() => {
+          Swal.fire("Error", "Failed to delete parcel.", "error");
+        });
     }
   };
 
   return (
     <div className="w-full mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">
-        All Parcels 
+        All Parcels
       </h1>
 
       {parcels.length === 0 ? (

@@ -20,9 +20,9 @@ const MyParcel = () => {
         });
     }
   }, [user?.email]);
-
+// this is for delete data 
   const handleDelete = (id) => {
-    Swal.fire({
+  Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
       icon: "warning",
@@ -32,7 +32,7 @@ const MyParcel = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`${import.meta.env.VITE_URL}parcel/${id}`).then(() => {
+        axios.delete(`${import.meta.env.VITE_URL}parcle/${id}`).then(() => {
           setParcels(parcels.filter((parcel) => parcel._id !== id));
           Swal.fire("Deleted!", "Your parcel has been deleted.", "success");
         });

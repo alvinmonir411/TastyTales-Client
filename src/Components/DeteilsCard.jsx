@@ -1,4 +1,4 @@
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { FaShoppingBag } from "react-icons/fa";
 import { NavLink } from "react-router";
@@ -8,7 +8,7 @@ import { CardContext } from "../Auth/Cardprover";
 
 const DeteilsCard = ({ recipe }) => {
   const { count, setCount, cardData, setCardData } = use(CardContext);
-
+ 
   const handleCardBtn = () => {
     const exists = cardData.find((item) => item._id === recipe._id);
     if (exists) {
@@ -42,23 +42,78 @@ const DeteilsCard = ({ recipe }) => {
         {/* Buttons */}
         <div className="flex justify-end items-center mb-6">
           <div className="mt-4 flex justify-center gap-4">
-            <NavLink
-              to={`/buynow/${recipe._id}`}
-              className="bg-green-500 text-white px-5 py-2 rounded-md shadow-md hover:bg-green-600 transition flex items-center gap-2"
+            {/* Open the modal using document.getElementById('ID').showModal() method */}
+            <button
+              className="btn"
+              onClick={() => document.getElementById("my_modal_5").showModal()}
             >
               <FaShoppingBag /> Buy Now
-            </NavLink>
-        
-              <button
-                onClick={handleCardBtn}
-                className="bg-blue-500 text-white px-5 py-2 rounded-md shadow-md hover:bg-blue-600 transition flex items-center gap-2"
-              >
-                <AiOutlineShoppingCart /> Add to Cart
-              </button>
-          
+            </button>
+            <dialog
+              id="my_modal_5"
+              className="modal modal-bottom sm:modal-middle"
+            >
+              <div className="modal-box relative p-6 rounded-xl shadow-lg bg-white max-w-md mx-auto">
+                {/* Close Button */}
+                <form method="dialog" className="absolute right-3 top-3">
+                  <button className="text-gray-500 hover:text-red-500 text-xl font-bold">
+                    ✕
+                  </button>
+                </form>
+
+                <h3 className="text-2xl font-semibold text-center mb-4 text-gray-800">
+                  {recipe.title}
+                </h3>
+                <div className="text-center mb-4">
+                  {/* Quantity & Location */}
+
+                  {/* Dynamic Price */}
+                  <div className="text-center mt-4 text-lg font-semibold text-green-600">
+                    Total Price: ৳{recipe?.price}
+                  </div>
+                </div>
+
+                <div className="space-y-3 text-sm text-gray-700">
+                  <div>
+                    <span className="font-medium">Category:</span>{" "}
+                    {recipe.category}
+                  </div>
+                  <div>
+                    <span className="font-medium">Cooking Time:</span>{" "}
+                    {recipe.cookingTime}
+                  </div>
+                  <div>
+                    <span className="font-medium">Servings:</span>{" "}
+                    {recipe.servings}
+                  </div>
+                </div>
+
+                {/* Confirm Button */}
+                <div className="mt-6 flex justify-center">
+                  <NavLink
+                    
+                    to={`/buynow/${recipe._id}`}
+                    className="inline-flex items-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition"
+                  >
+                    <FaShoppingBag />
+                    Proceed to Checkout
+                  </NavLink>
+                </div>
+              </div>
+            </dialog>
+
+            <button
+              onClick={handleCardBtn}
+              className="bg-blue-500 text-white px-5 py-2 rounded-md shadow-md hover:bg-blue-600 transition flex items-center gap-2"
+            >
+              <AiOutlineShoppingCart /> Add to Cart
+            </button>
           </div>
         </div>
 
+        <div className="text-2xl font-semibold text-green-600 mb-4 text-center">
+          Price: ${recipe.price?.toFixed(2)}
+        </div>
         {/* Description */}
         <p className="text-lg text-gray-700 mb-4">{recipe.description}</p>
 
@@ -126,14 +181,6 @@ const DeteilsCard = ({ recipe }) => {
           </div>
         </div>
       </div>
-
-      {/* Buy Now button at bottom */}
-      <NavLink
-        to={`/buynow/${recipe._id}`}
-        className="bg-blue-500 text-white px-6 py-3 rounded-full shadow-md hover:bg-blue-600 transition duration-300 ease-in-out flex items-center justify-center mx-auto w-[200px] text-center mt-8"
-      >
-        Buy Now
-      </NavLink>
     </div>
   );
 };

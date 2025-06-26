@@ -59,7 +59,7 @@ const Navber = () => {
       </li>
       <li>
         <NavLink
-          to="/aboutus"
+          to="/AboutUs"
           className={({ isActive }) =>
             isActive ? "text-blue-500 underline" : ""
           }

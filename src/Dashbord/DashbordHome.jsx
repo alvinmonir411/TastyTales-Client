@@ -4,33 +4,36 @@ import CountUp from 'react-countup';
 import { MdEqualizer } from 'react-icons/md';
 import { NavLink } from 'react-router';
 import { motion } from 'framer-motion';
+import { FiPackage } from 'react-icons/fi';
 const DashbordHome = () => {
   const [totaldata,settotaldata]= useState([])
-const [sellar, setSeller] = useState([]);
+  const [sellar, setSeller] = useState([]);
+  const [totalparcle, settotalparcle] = useState([]);
+  console.log(totalparcle);
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_URL}allrecipe/admin`).then((data) => {
-      settotaldata(data.data);
-    });
-    
-  }, []);
+    const fetchData = async () => {
+      try {
+        const [recipeRes, authorRes, parcelRes] = await Promise.all([
+          axios.get(`${import.meta.env.VITE_URL}allrecipe/admin`),
+          axios.get(`${import.meta.env.VITE_URL}uniqueauthors`),
+          axios.get(`${import.meta.env.VITE_URL}parcels`),
+        ]);
 
- 
-    useEffect(() => {
-      axios
-        .get(`${import.meta.env.VITE_URL}uniqueauthors`)
-        .then((data) => {
-          setSeller(data.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching unique authors:", error.message);
-        });
-    }, []);
+        settotaldata(recipeRes.data);
+        setSeller(authorRes.data);
+        settotalparcle(parcelRes.data); 
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+      }
+    };
+
+    fetchData();
+  }, []);
+  
+
 
   return (
-    <motion.div
-      
-      className="w-[80vw] m-10  mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-center items-center gap-10 capitalize"
-    >
+    <motion.div className="w-[80vw] m-10  mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-center items-center gap-10 capitalize">
       {/* for total recipe */}
       <div className="card bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 ease-in-out p-6 flex flex-col items-center justify-center text-center space-y-4 transform hover:scale-105">
         <NavLink
@@ -45,14 +48,24 @@ const [sellar, setSeller] = useState([]);
         </NavLink>
       </div>
 
-      {/* for total seller */}
-      <div className="card bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 shadow-lg hover:shadow-2xl transition duration-300 ease-in-out rounded-xl p-6 flex flex-col justify-center items-center space-y-3">
+      {/* for Totalseller */}
+      <div className="card bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 ease-in-out p-6 flex flex-col items-center justify-center text-center space-y-4 transform hover:scale-105">
         <MdEqualizer size={40} className="text-blue-700" />
         <h1 className="font-bold text-center text-xl text-gray-800">
           Total sellar
         </h1>
         <p className="text-blue-900 font-black text-5xl">
           <CountUp end={sellar.length} duration={5} />
+        </p>
+      </div>
+      {/* total parcle */}
+      <div className="card bg-gradient-to-br from-blue-100 via-blue-200 to-blue-300 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 ease-in-out p-6 flex flex-col items-center justify-center text-center space-y-4 transform hover:scale-105">
+        <FiPackage size={40} className="text-green-700" />
+        <h1 className="font-bold text-center text-xl text-gray-800">
+          Total Parcels
+        </h1>
+        <p className="text-green-900 font-black text-5xl">
+          <CountUp end={totalparcle.length} duration={5} />
         </p>
       </div>
     </motion.div>

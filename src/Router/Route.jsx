@@ -14,6 +14,9 @@ import Mycard from "../Pages/Mycard";
 import Addpercel from "../Pages/Dashbord/Addpercel";
 import Allparcle from "../Dashbord/Card/Allparcle";
 import MyParcel from "../Dashbord/Card/MyParcel";
+import AboutUs from "../Components/AboutUs";
+import BigBlog from "./../Components/BigBlog.";
+
 // import MyParcel from "../Dashbord/Card/MyParcel";
 
 
@@ -49,6 +52,14 @@ export const router = createBrowserRouter([
       {
         path: "mycard",
         Component: Mycard,
+      },
+      {
+        path: "AboutUs",
+        Component: AboutUs,
+      },
+      {
+        path: "blogs",
+        Component:BigBlog
       },
     ],
   },
