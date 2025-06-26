@@ -59,7 +59,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "blogs",
-        Component:BigBlog
+        Component: BigBlog,
       },
     ],
   },

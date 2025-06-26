@@ -3,7 +3,14 @@ import React, { useEffect, useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
 import { AuthContext } from "../Auth/AuthProvider";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import CheckoutForm from "../stripeform/CheckoutForm";
 
+
+const stripePromise = loadStripe(
+  "pk_test_51ReGZaHI8fRZlaGvFtGl2cbH35I1XuCbC0Gyz0XUshomqGjXfUdFCJhVQfwLthJYtXPan6znRtftAsX4IWlzGBQ700QImNrKZ3"
+);
 const BuyNow = () => {
   const { user } = useContext(AuthContext);
   const { id } = useParams();
@@ -40,14 +47,12 @@ const BuyNow = () => {
     const order = {
       buyerInfo: { ...data },
       sellerInfo: {
-        email: recipe?.email,
-        name: recipe?.name,
-        phone: recipe?.phone,
-        address: recipe?.address,
-        // add more fields as needed
+        email: recipe.author,
       },
+
       recipeId: recipe._id,
       title: recipe.title,
+      price:recipe?.price,
       totalPrice,
     };
 
@@ -56,8 +61,7 @@ const BuyNow = () => {
   } 
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
+    <div
       className="space-y-4 max-w-md mx-auto bg-white p-6 rounded-lg shadow-md"
     >
       <h2 className="text-2xl font-semibold mb-4 text-center">Buy Now</h2>
@@ -66,12 +70,10 @@ const BuyNow = () => {
         {...register("name", { required: "Name is required" })}
         placeholder="Your Name"
         className="input input-bordered w-full"
-        defaultValue={user?.displayName}
+        value={user?.displayName}
         readOnly
       />
-      {errors.name && (
-        <p className="text-red-500 text-sm">{errors.name.message}</p>
-      )}
+      
 
       <input
         {...register("phone", { required: "Phone number is required" })}
@@ -86,13 +88,11 @@ const BuyNow = () => {
         {...register("email", { required: "Email is required" })}
         placeholder="Email"
         type="email"
-        defaultValue={user?.email}
+        value={user?.email}
         readOnly
         className="input input-bordered w-full"
       />
-      {errors.email && (
-        <p className="text-red-500 text-sm">{errors.email.message}</p>
-      )}
+    
 
       <textarea
         {...register("address", { required: "Address is required" })}
@@ -126,13 +126,12 @@ const BuyNow = () => {
         Total Payable:{" "}
         <span className="text-green-600">৳{totalPrice.toFixed(2)}</span>
       </div>
-
-      {user && (
-        <button type="submit" className="btn btn-primary w-full mt-2">
-          Place Order
-        </button>
-      )}
-    </form>
+      <div>
+        <Elements stripe={stripePromise}>
+          <CheckoutForm onSubmit={onSubmit} totalPrice={totalPrice} />
+        </Elements>
+      </div>
+    </div>
   );
 };
 

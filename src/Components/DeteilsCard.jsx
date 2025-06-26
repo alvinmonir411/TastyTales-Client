@@ -1,14 +1,17 @@
 import React, { use, useState } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { FaShoppingBag } from "react-icons/fa";
-import { NavLink } from "react-router";
+import { NavLink, useParams } from "react-router";
 
 import { toast } from "react-toastify";
 import { CardContext } from "../Auth/Cardprover";
 
+
 const DeteilsCard = ({ recipe }) => {
+  const { id } = useParams()
+  
   const { count, setCount, cardData, setCardData } = use(CardContext);
- 
+
   const handleCardBtn = () => {
     const exists = cardData.find((item) => item._id === recipe._id);
     if (exists) {
@@ -87,12 +90,11 @@ const DeteilsCard = ({ recipe }) => {
                     {recipe.servings}
                   </div>
                 </div>
-
+            
                 {/* Confirm Button */}
                 <div className="mt-6 flex justify-center">
                   <NavLink
-                    
-                    to={`/buynow/${recipe._id}`}
+                    to={`/buynow/${id}`}
                     className="inline-flex items-center gap-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition"
                   >
                     <FaShoppingBag />
