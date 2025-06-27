@@ -1,12 +1,38 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-const CheckoutForm = ({onSubmit, totalPrice }) => {
+const CheckoutForm = ({
+  onSubmit,
+  orderinfo,
+  quantity,
+  totalPrice,
+  recipeId,
+  deliveryCharge,
+}) => {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState("");
   const [cardComplete, setCardComplete] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [clientSecret, setClientSecret] = useState("");
+
+  useEffect(() => {
+    axios
+      .post(`${import.meta.env.VITE_URL}creat-payment-intent`, {
+        recipeId,
+        totalPrice,
+        quantity,
+        deliveryCharge,
+      })
+      .then((res) => {
+        setClientSecret(res.data.clientSecret);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [recipeId, totalPrice, quantity, deliveryCharge]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,16 +47,52 @@ const CheckoutForm = ({onSubmit, totalPrice }) => {
 
     const card = elements.getElement(CardElement);
 
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: "card",
-      card,
-    });
+    const { error: createPaymentMethodError, paymentMethod } =
+      await stripe.createPaymentMethod({
+        type: "card",
+        card,
+        billing_details: {
+          name: orderinfo?.buyerInfo?.name,
+          email: orderinfo?.buyerInfo?.email,
+          phone: orderinfo?.buyerInfo?.phone,
+        },
+      });
 
-    if (error) {
-      setError(error.message);
-    } else {
-      console.log("✅ PaymentMethod:", paymentMethod);
-      onSubmit()
+    if (createPaymentMethodError) {
+      setError(createPaymentMethodError.message);
+      setProcessing(false);
+      return;
+    }
+
+    console.log("✅ PaymentMethod:", paymentMethod);
+    onSubmit();
+
+    // Confirm the payment with Stripe using clientSecret
+    const { error: confirmPaymentError, paymentIntent } =
+      await stripe.confirmCardPayment(clientSecret, {
+        payment_method: paymentMethod.id,
+      });
+
+    if (confirmPaymentError) {
+      setError(confirmPaymentError.message);
+      setProcessing(false);
+      return;
+    }
+
+    if (paymentIntent) {
+      const fullOrder = {
+        ...orderinfo,
+        transaction_id: paymentIntent.id,
+        paymentStatus: paymentIntent.status,
+        paidAt: new Date(),
+      };
+
+      try {
+        await axios.post(`${import.meta.env.VITE_URL}orders`, fullOrder);
+        toast.success("Your order is complete!");
+      } catch {
+        toast.error("Order save failed!");
+      }
     }
 
     setProcessing(false);
@@ -62,12 +124,11 @@ const CheckoutForm = ({onSubmit, totalPrice }) => {
       {error && <p className="text-red-500 mt-2">{error}</p>}
 
       <button
-        
         type="submit"
         disabled={!stripe || processing || !cardComplete}
         className="btn btn-primary w-full mt-4"
       >
-        {processing ? "Processing..." : `Pay ৳${totalPrice?.toFixed(2)}`}
+        {processing ? "Processing..." : `Pay ৳${Math.round(totalPrice)}`}
       </button>
     </form>
   );
