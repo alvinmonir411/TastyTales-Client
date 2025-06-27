@@ -18,6 +18,7 @@ import AboutUs from "../Components/AboutUs";
 import BigBlog from "./../Components/BigBlog.";
 import Myorder from "../Dashbord/Myorder";
 import Myrecipe from "../Components/Myrecipe";
+import Totalrecipes from "../Dashbord/Totalrecipes";
 
 // import MyParcel from "../Dashbord/Card/MyParcel";
 
@@ -39,14 +40,7 @@ export const router = createBrowserRouter([
           </PrivetRout>
         ),
       },
-      {
-        path: "myrecipes",
-        element: (
-          <PrivetRout>
-            <Myrecipe />
-          </PrivetRout>
-        ),
-      },
+
       {
         path: "Allrecipe",
         Component: Allrecipe,
@@ -103,7 +97,20 @@ export const router = createBrowserRouter([
         Component: Allparcle,
         loader: () => fetch(`${import.meta.env.VITE_URL}parcels`),
       },
-
+      {
+        path: "myrecipes",
+        element: (
+          <PrivetRout>
+            <Myrecipe />
+          </PrivetRout>
+        ),
+      },
+      { path: "totalRecipes" , element: (
+        <PrivetRout>
+        <Totalrecipes/>
+        </PrivetRout>
+      ),},
+      
       {
         path: "myparcle",
         Component: MyParcel,

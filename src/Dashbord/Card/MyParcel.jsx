@@ -3,6 +3,7 @@ import axios from "axios";
 import { AuthContext } from "../../Auth/AuthProvider";
 import { motion } from "framer-motion";
 import Swal from "sweetalert2";
+import BuynowBTN from "../../BuyNowBTN/BuynowBTN";
 
 const MyParcel = () => {
   const { user } = useContext(AuthContext);
@@ -116,6 +117,7 @@ const MyParcel = () => {
                 >
                   Delete
                 </button>
+               
               </td>
             </motion.tr>
           ))}

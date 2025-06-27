@@ -28,16 +28,18 @@ const AdminSidebar = () => {
             🏠 Dashbord Home
           </NavLink>
         </li>
-        <li>
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? "text-blue-500 underline" : ""
-            }
-            to="totalRecipes"
-          >
-            📋 Total Recipes
-          </NavLink>
-        </li>
+        {user && (
+          <li>
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? "text-blue-500 underline" : ""
+              }
+              to="totalRecipes"
+            >
+              📋 Total Recipes
+            </NavLink>
+          </li>
+        )}
         <li>
           <NavLink
             className={({ isActive }) =>
@@ -50,12 +52,12 @@ const AdminSidebar = () => {
         </li>
         <li>
           <NavLink
-            to="/myrecipes"
             className={({ isActive }) =>
               isActive ? "text-blue-500 underline" : ""
             }
+            to="myrecipes"
           >
-            My-Recipes
+            🍳 My Recipe
           </NavLink>
         </li>
         <li>
