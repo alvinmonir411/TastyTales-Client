@@ -34,12 +34,12 @@ const Register = () =>
           })
           .catch((error) => {
             toast.error("Profile update failed");
-            console.log(error.message);
+            
           });
       })
       .catch((error) => {
         toast.error("Something went wrong");
-        console.log(error.message);
+    
       });
   };
 

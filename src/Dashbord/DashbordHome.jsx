@@ -9,7 +9,7 @@ const DashbordHome = () => {
   const [totaldata,settotaldata]= useState([])
   const [sellar, setSeller] = useState([]);
   const [totalparcle, settotalparcle] = useState([]);
-  console.log(totalparcle);
+
   useEffect(() => {
     const fetchData = async () => {
       try {

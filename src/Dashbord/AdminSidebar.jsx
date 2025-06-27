@@ -90,6 +90,16 @@ const AdminSidebar = () => {
             📦 My Parcle
           </NavLink>
         </li>
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "text-blue-500 underline" : ""
+            }
+            to="myorder"
+          >
+            📦 My Order
+          </NavLink>
+        </li>
       </ul>
     </aside>
   );

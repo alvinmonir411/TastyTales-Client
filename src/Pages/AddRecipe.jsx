@@ -10,7 +10,7 @@ const AddRecipe = () => {
   const { user } = useContext(AuthContext);
   const handleaddrecipe = (e) => {
     e.preventDefault()
-    console.log("btn cliked"); 
+    
     
     const form = e.target;
     const formdata = new FormData(form)
@@ -26,7 +26,7 @@ const Instructions = data.instructions.split(",").map((instr) => instr.trim());
 data.instructions= Instructions
 
 
-    console.log(data);
+
     axios
       .post(`${import.meta.env.VITE_URL}addrecipe` ,data)
       .then((response) => {

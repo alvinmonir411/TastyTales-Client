@@ -16,6 +16,7 @@ import Allparcle from "../Dashbord/Card/Allparcle";
 import MyParcel from "../Dashbord/Card/MyParcel";
 import AboutUs from "../Components/AboutUs";
 import BigBlog from "./../Components/BigBlog.";
+import Myorder from "../Dashbord/Myorder";
 
 // import MyParcel from "../Dashbord/Card/MyParcel";
 
@@ -93,9 +94,15 @@ export const router = createBrowserRouter([
         Component: Allparcle,
         loader: () => fetch(`${import.meta.env.VITE_URL}parcels`),
       },
+
       {
         path: "myparcle",
         Component: MyParcel,
+      },
+      {
+        path: "myorder",
+        Component: Myorder,
+      
       },
     ],
   },

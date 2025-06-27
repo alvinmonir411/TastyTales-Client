@@ -1,6 +1,7 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 const CheckoutForm = ({
@@ -17,7 +18,7 @@ const CheckoutForm = ({
   const [cardComplete, setCardComplete] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [clientSecret, setClientSecret] = useState("");
-
+const navigate = useNavigate()
   useEffect(() => {
     axios
       .post(`${import.meta.env.VITE_URL}creat-payment-intent`, {
@@ -64,7 +65,7 @@ const CheckoutForm = ({
       return;
     }
 
-    console.log("✅ PaymentMethod:", paymentMethod);
+    
     onSubmit();
 
     // Confirm the payment with Stripe using clientSecret
@@ -90,6 +91,7 @@ const CheckoutForm = ({
       try {
         await axios.post(`${import.meta.env.VITE_URL}orders`, fullOrder);
         toast.success("Your order is complete!");
+        navigate(`/recipedeteils/${recipeId}`);
       } catch {
         toast.error("Order save failed!");
       }
@@ -99,7 +101,7 @@ const CheckoutForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="container mx-auto mt-20">
       <CardElement
         onChange={(event) => {
           setError(event.error ? event.error.message : "");
@@ -128,7 +130,7 @@ const CheckoutForm = ({
         disabled={!stripe || processing || !cardComplete}
         className="btn btn-primary w-full mt-4"
       >
-        {processing ? "Processing..." : `Pay ৳${Math.round(totalPrice)}`}
+        {processing ? "Processing..." : `Pay $${Math.round(totalPrice)}`}
       </button>
     </form>
   );
