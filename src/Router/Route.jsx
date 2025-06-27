@@ -17,6 +17,7 @@ import MyParcel from "../Dashbord/Card/MyParcel";
 import AboutUs from "../Components/AboutUs";
 import BigBlog from "./../Components/BigBlog.";
 import Myorder from "../Dashbord/Myorder";
+import Myrecipe from "../Components/Myrecipe";
 
 // import MyParcel from "../Dashbord/Card/MyParcel";
 
@@ -35,6 +36,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivetRout>
             <AddRecipe />
+          </PrivetRout>
+        ),
+      },
+      {
+        path: "myrecipes",
+        element: (
+          <PrivetRout>
+            <Myrecipe />
           </PrivetRout>
         ),
       },
@@ -102,7 +111,6 @@ export const router = createBrowserRouter([
       {
         path: "myorder",
         Component: Myorder,
-      
       },
     ],
   },

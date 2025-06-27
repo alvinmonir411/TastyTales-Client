@@ -47,7 +47,7 @@ const Navber = () => {
           Add-Recipes
         </NavLink>
       </li>
-      <li>
+      {/* <li>
         <NavLink
           to="/myrecipes"
           className={({ isActive }) =>
@@ -56,7 +56,7 @@ const Navber = () => {
         >
           My-Recipes
         </NavLink>
-      </li>
+      </li> */}
       <li>
         <NavLink
           to="/AboutUs"

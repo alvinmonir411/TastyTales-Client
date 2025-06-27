@@ -50,12 +50,12 @@ const AdminSidebar = () => {
         </li>
         <li>
           <NavLink
+            to="/myrecipes"
             className={({ isActive }) =>
               isActive ? "text-blue-500 underline" : ""
             }
-            to="/myrecipe"
           >
-            🍳 My Recipe
+            My-Recipes
           </NavLink>
         </li>
         <li>
