@@ -1,11 +1,15 @@
-import React from 'react'
+import React from "react";
 
 const SocailLogin = () => {
   return (
-    <div>
-      
-    </div>
-  )
-}
+    <button
+      onClick={googlelogin}
+      className="btn bg-white text-black border-[#e5e5e5]"
+    >
+      <BsGoogle className="text-accent" />
+      Login with Google
+    </button>
+  );
+};
 
-export default SocailLogin
+export default SocailLogin;

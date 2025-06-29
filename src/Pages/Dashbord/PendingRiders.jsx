@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "react-toastify";
 
 const PendingRiders = () => {
   const [selectedRider, setSelectedRider] = useState(null);
@@ -38,10 +39,24 @@ const PendingRiders = () => {
       console.error("Status update failed:", err);
     },
   });
+  // foraprovemutaion
+  const approveMutation = useMutation({
+    mutationFn: (riderId) =>
+      axios.patch(`${import.meta.env.VITE_URL}riders/${riderId}/approve`),
+    onSuccess: () => {
+      toast.success("Rider approved successfully");
+      queryClient.invalidateQueries(["pendingRiders"]);
+    },
+    onError: () => {
+      toast.error("Failed to approve rider");
+    },
+  });
 
-  const handleStatusUpdate = (riderId, action) => {
-    const status = action === "Approve" ? "Approve" : "Decline";
-    mutation.mutate({ riderId, status });
+  const handleApprove = (riderId) => {
+    approveMutation.mutate(riderId);
+  };
+  const handleDecline = (riderId) => {
+    console.log(riderId);
   };
 
   if (isLoading) {
@@ -140,13 +155,13 @@ const PendingRiders = () => {
                         View
                       </button>
                       <button
-                        onClick={() => handleStatusUpdate(rider._id, "Approve")}
+                        onClick={() => handleApprove(rider._id)}
                         className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md shadow mr-2"
                       >
                         Approve
                       </button>
                       <button
-                        onClick={() => handleStatusUpdate(rider._id, "Decline")}
+                        onClick={() => handleDecline(rider._id)}
                         className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md shadow"
                       >
                         Decline

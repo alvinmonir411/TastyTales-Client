@@ -1,12 +1,14 @@
-import React from "react";
+import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useLoaderData } from "react-router";
 import { toast } from "react-toastify";
+import { AuthContext } from "../Auth/AuthProvider";
 
 const BeARiderForm = () => {
   const districtData = useLoaderData();
-
+  const [loading, setLoading] = useState(false);
+  const { user } = use(AuthContext);
   const {
     register,
     handleSubmit,
@@ -30,6 +32,7 @@ const BeARiderForm = () => {
   const uniqueDistricts = [...new Set(selectedDistricts)];
 
   const handleFormSubmit = async (data) => {
+    setLoading(true);
     try {
       const imageFile = data.photo[0];
       const formData = new FormData();
@@ -56,6 +59,7 @@ const BeARiderForm = () => {
         if (res.data.insertedId) {
           reset();
           toast.success("you have succesfully Appiled");
+          setLoading(false);
         }
       });
     } catch (error) {
@@ -75,7 +79,8 @@ const BeARiderForm = () => {
           type="text"
           {...register("fullName", { required: "Full Name is required" })}
           className="w-full border px-3 py-2 rounded"
-          placeholder="John Doe"
+          readOnly
+          defaultValue={user.displayName}
         />
         {errors.fullName && (
           <p className="text-red-600 text-sm">{errors.fullName.message}</p>
@@ -103,7 +108,8 @@ const BeARiderForm = () => {
           type="email"
           {...register("email", { required: "Email is required" })}
           className="w-full border px-3 py-2 rounded"
-          placeholder="you@example.com"
+          readOnly
+          defaultValue={user.email}
         />
         {errors.email && (
           <p className="text-red-600 text-sm">{errors.email.message}</p>
@@ -241,11 +247,17 @@ const BeARiderForm = () => {
       </div>
 
       {/* Submit */}
+      {/* Submit button */}
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700 transition"
+        disabled={loading}
+        className={`w-full py-2 rounded font-semibold transition ${
+          loading
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-blue-600 hover:bg-blue-700 text-white"
+        }`}
       >
-        Submit Application
+        {loading ? "Submitting..." : "Submit Application"}
       </button>
     </form>
   );

@@ -1,115 +1,175 @@
-import React, { useContext } from "react";
-import { NavLink, useNavigate } from "react-router";
-import { AuthContext } from "./../Auth/AuthProvider";
+import React, { useContext, useState } from "react";
 import { BsGoogle } from "react-icons/bs";
+import { AuthContext } from "../Auth/AuthProvider";
 import { toast } from "react-toastify";
-import lottianimation from "../../src/assets/lottifiles.json";
-import Lottie from "react-lottie";
+import { useNavigate, NavLink } from "react-router-dom";
+import axios from "axios";
+import { motion } from "framer-motion";
 
 const Login = () => {
-  const { handlegooglelogin, user, setuser, handlelogin } =
+  const { handlegooglelogin, setuser, handleloginwitheamil } =
     useContext(AuthContext);
   const navigate = useNavigate();
 
-  // Google login
+  const [loading, setLoading] = useState(false);
+
+  const handleEmailLoginSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    setLoading(true);
+    handleloginwitheamil(email, password)
+      .then((data) => {
+        const user = data.user;
+        setuser(user);
+
+        // Save user to MongoDB
+        const userInfo = {
+          name: user.displayName || "",
+          email: user.email,
+          photoURL: user.photoURL || "",
+          role: "user",
+        };
+
+        axios
+          .post(`${import.meta.env.VITE_URL}users`, userInfo)
+          .then(() => {
+            toast.success(
+              `Welcome back${user.displayName ? `, ${user.displayName}` : ""}!`
+            );
+            navigate("/");
+          })
+          .catch(() => {
+            toast.error("Failed to save user to database");
+          });
+      })
+      .catch(() => {
+        toast.error("Invalid email or password");
+      })
+      .finally(() => setLoading(false));
+  };
+
   const googlelogin = () => {
     handlegooglelogin()
       .then((data) => {
-        setuser(data.user);
-        toast.success(`Welcome ${data.user?.displayName}`);
-        navigate("/");
+        const user = data.user;
+        setuser(user);
+
+        const userInfo = {
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          role: "user",
+        };
+
+        axios
+          .post(`${import.meta.env.VITE_URL}users`, userInfo)
+          .then(() => {
+            toast.success(`Welcome ${user.displayName}`);
+            navigate("/");
+          })
+          .catch(() => {
+            toast.error("Failed to save user to database");
+          });
       })
       .catch(() => {
         toast.error("Something went wrong");
       });
-  };
-
-  // Email/password login
-  const handleloginemailpassword = (e) => {
-    e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.Password.value;
-
-    handlelogin(email, password)
-      .then((data) => {
-        setuser(data.user);
-        toast.success(`Welcome ${data.user?.displayName}`);
-        navigate("/");
-      })
-      .catch(() => {
-        toast.error("Something went wrong");
-      });
-  };
-
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: lottianimation,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
   };
 
   return (
-    <div className="hero bg-base-200 min-h-screen">
-      <div className="hero-content flex-col lg:flex-row-reverse">
-        <div className="text-center lg:text-left">
-          <h1 className="text-5xl font-bold">Login now!</h1>
-          <Lottie options={defaultOptions} height={300} width={300} />
-          <NavLink to="/" className="btn w-full bg-accent">
-            Back to Home
-          </NavLink>
-        </div>
+    <motion.div
+      className="min-h-screen flex items-center justify-center px-4"
+      style={{
+        background:
+          "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #6b8dd6 100%)",
+      }}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
+    >
+      <motion.div
+        className="bg-white bg-opacity-10 backdrop-blur-md rounded-lg shadow-lg p-10 max-w-md w-full text-center"
+        initial={{ scale: 0.9 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.4 }}
+      >
+        <h1
+          className="text-4xl font-extrabold mb-8"
+          style={{
+            background: "linear-gradient(90deg, #f7971e, #ffd200, #f7971e)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+            textFillColor: "transparent",
+          }}
+        >
+          Login to Your Account
+        </h1>
 
-        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-          <div className="card-body">
-            <form onSubmit={handleloginemailpassword} className="fieldset">
-              <label className="label">Email</label>
-              <input
-                type="email"
-                name="email"
-                className="input"
-                placeholder="Email"
-                required
-              />
+        {/* Email/Password Login Form */}
+        <form onSubmit={handleEmailLoginSubmit} className="space-y-5 text-left">
+          <div>
+            <label className="block mb-1 font-semibold text-white">Email</label>
+            <input
+              type="email"
+              name="email"
+              className="input input-bordered w-full"
+              placeholder="Email"
+              required
+            />
+          </div>
 
-              <label className="label">Password</label>
-              <input
-                type="password"
-                name="Password"
-                className="input"
-                placeholder="Password"
-                required
-              />
-
-              <div className="flex justify-between items-center text-sm mt-2">
-                <NavLink to="#" className="link link-hover text-blue-500">
-                  Forgot password?
-                </NavLink>
-                <NavLink
-                  to="/register"
-                  className="link link-hover text-blue-500 font-semibold"
-                >
-                  Register Now
-                </NavLink>
-              </div>
-
-              <button type="submit" className="btn btn-neutral mt-4">
-                Login
-              </button>
-            </form>
+          <div>
+            <label className="block mb-1 font-semibold text-white">
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              className="input input-bordered w-full"
+              placeholder="Password"
+              required
+            />
           </div>
 
           <button
-            onClick={googlelogin}
-            className="btn btn-neutral bg-white text-black border-[#e5e5e5] m-5 mb-10"
+            type="submit"
+            disabled={loading}
+            className="btn btn-primary w-full"
           >
-            <BsGoogle className="text-accent" />
-            Login with Google
+            {loading ? "Logging in..." : "Login"}
           </button>
-        </div>
-      </div>
-    </div>
+        </form>
+
+        <div className="divider text-white mt-6">OR</div>
+
+        {/* Google Login Button */}
+        <button
+          onClick={googlelogin}
+          className="flex items-center justify-center gap-3 w-full py-3 rounded-md font-semibold"
+          style={{
+            background: "linear-gradient(90deg, #ff416c, #ff4b2b)",
+            color: "white",
+            boxShadow: "0 4px 15px 0 rgba(255, 75, 43, 0.5)",
+            transition: "box-shadow 0.3s ease",
+          }}
+          whileHover={{ boxShadow: "0 6px 20px 0 rgba(255, 75, 43, 0.7)" }}
+        >
+          <BsGoogle size={24} />
+          Login with Google
+        </button>
+
+        <p className="mt-6 text-white">
+          Don't have an account?{" "}
+          <NavLink to="/register" className="text-yellow-300 underline">
+            Register here
+          </NavLink>
+        </p>
+      </motion.div>
+    </motion.div>
   );
 };
 
