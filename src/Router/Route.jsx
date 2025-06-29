@@ -5,7 +5,7 @@ import Register from "../Pages/Register";
 import AddRecipe from "../Pages/AddRecipe";
 import PrivetRout from "../PrivetRoute/PrivetRout";
 import Allrecipe from "../Pages/Allrecipe";
-import Home from './../Root/Home/Home';
+import Home from "./../Root/Home/Home";
 import Admin from "../Dashbord/admin";
 import DashbordHome from "../Dashbord/DashbordHome";
 import Deteils from "../Components/Deteils";
@@ -19,9 +19,11 @@ import BigBlog from "./../Components/BigBlog.";
 import Myorder from "../Dashbord/Myorder";
 import Myrecipe from "../Components/Myrecipe";
 import Totalrecipes from "../Dashbord/Totalrecipes";
+import PrivateRoute from "../PrivetRoute/PrivetRout";
+import BeARider from "../Pages/BeARider";
+import PendingRiders from "../Pages/Dashbord/PendingRiders";
 
 // import MyParcel from "../Dashbord/Card/MyParcel";
-
 
 export const router = createBrowserRouter([
   {
@@ -97,6 +99,7 @@ export const router = createBrowserRouter([
         Component: Allparcle,
         loader: () => fetch(`${import.meta.env.VITE_URL}parcels`),
       },
+
       {
         path: "myrecipes",
         element: (
@@ -105,12 +108,15 @@ export const router = createBrowserRouter([
           </PrivetRout>
         ),
       },
-      { path: "totalRecipes" , element: (
-        <PrivetRout>
-        <Totalrecipes/>
-        </PrivetRout>
-      ),},
-      
+      {
+        path: "totalRecipes",
+        element: (
+          <PrivetRout>
+            <Totalrecipes />
+          </PrivetRout>
+        ),
+      },
+
       {
         path: "myparcle",
         Component: MyParcel,
@@ -118,6 +124,24 @@ export const router = createBrowserRouter([
       {
         path: "myorder",
         Component: Myorder,
+      },
+      {
+        path: "beARider",
+        loader: () => fetch("/warehouses.json"),
+        element: (
+          <PrivateRoute>
+            <BeARider></BeARider>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "pendingRiders",
+
+        element: (
+          <PrivateRoute>
+            <PendingRiders />
+          </PrivateRoute>
+        ),
       },
     ],
   },

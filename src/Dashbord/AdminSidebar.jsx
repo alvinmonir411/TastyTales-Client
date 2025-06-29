@@ -3,7 +3,7 @@ import { NavLink } from "react-router";
 import { AuthContext } from "../Auth/AuthProvider";
 
 const AdminSidebar = () => {
-  const {user}= use(AuthContext)
+  const { user } = use(AuthContext);
   return (
     <aside className="w-64 bg-base-200 text-base-content overflow-y-hidden-hidden  p-5 ">
       <h2 className="text-2xl font-bold text-blue-600 mb-6">Admin Panel</h2>
@@ -41,13 +41,14 @@ const AdminSidebar = () => {
           </li>
         )}
         <li>
+          {" "}
           <NavLink
             className={({ isActive }) =>
               isActive ? "text-blue-500 underline" : ""
             }
-            to="totalUser"
+            to="pendingRiders"
           >
-            👥 Total Users
+            📦 Pending Riders
           </NavLink>
         </li>
         <li>
@@ -100,6 +101,16 @@ const AdminSidebar = () => {
             to="myorder"
           >
             📦 My Order
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "text-blue-500 underline" : ""
+            }
+            to="beARider"
+          >
+            📦 Be A Rider
           </NavLink>
         </li>
       </ul>
