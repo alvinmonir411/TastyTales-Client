@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { AuthContext } from "../../Auth/AuthProvider";
+
 import { motion } from "framer-motion";
 import Swal from "sweetalert2";
-import BuynowBTN from "../../BuyNowBTN/BuynowBTN";
+import { AuthContext } from "../Auth/AuthProvider";
 
 const MyParcel = () => {
   const { user } = useContext(AuthContext);
@@ -21,9 +21,9 @@ const MyParcel = () => {
         });
     }
   }, [user?.email]);
-// this is for delete data 
+  // this is for delete data
   const handleDelete = (id) => {
-  Swal.fire({
+    Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
       icon: "warning",
@@ -117,7 +117,6 @@ const MyParcel = () => {
                 >
                   Delete
                 </button>
-               
               </td>
             </motion.tr>
           ))}

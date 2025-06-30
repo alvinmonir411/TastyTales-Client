@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import RecipeCard from "../Components/RecipeCard";
-
+import RecipeCard from "./../Components/RecipeCard";
 const Allrecipe = () => {
   const [recipes, setRecipes] = useState([]);
   const [totalRecipes, setTotalRecipes] = useState(0);

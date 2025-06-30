@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { AuthContext } from "../../Auth/AuthProvider";
+
 import { useLoaderData } from "react-router";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { AuthContext } from "../Auth/AuthProvider";
 
 const AddParcel = () => {
   const { user } = useContext(AuthContext);

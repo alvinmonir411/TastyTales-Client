@@ -1,11 +1,12 @@
 import React, { useContext, useState, use } from "react";
 import { BsGoogle } from "react-icons/bs";
 import { NavLink, useNavigate } from "react-router";
-import { AuthContext } from "../Auth/AuthProvider";
+
 import { toast } from "react-toastify";
 import { updateProfile } from "firebase/auth";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { AuthContext } from "../Auth/AuthProvider";
 
 const Register = () => {
   const navigate = useNavigate();

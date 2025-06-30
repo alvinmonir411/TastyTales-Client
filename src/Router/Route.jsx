@@ -1,31 +1,29 @@
 import { createBrowserRouter } from "react-router";
-import Root from "../Root/Root";
-import Login from "../Pages/Login";
-import Register from "../Pages/Register";
-import AddRecipe from "../Pages/AddRecipe";
-import PrivetRout from "../PrivetRoute/PrivetRout";
-import Allrecipe from "../Pages/Allrecipe";
+import Root from "./../Root/Root";
 import Home from "./../Root/Home/Home";
-import Admin from "../Dashbord/admin";
-import DashbordHome from "../Dashbord/DashbordHome";
-import Deteils from "../Components/Deteils";
-import BuyNow from "../Pages/BuyNow";
-import Mycard from "../Pages/Mycard";
-import Addpercel from "../Pages/Dashbord/Addpercel";
-import Allparcle from "../Dashbord/Card/Allparcle";
-import MyParcel from "../Dashbord/Card/MyParcel";
-import AboutUs from "../Components/AboutUs";
+import PrivateRoute from "./../PrivetRoute/PrivetRout";
+import AddParcel from "../Users/Addpercel";
+import AddRecipe from "./../Pages/AddRecipe";
+import Allrecipe from "./../Pages/Allrecipe";
+import Deteils from "./../Components/Deteils";
+import BuyNow from "./../Pages/BuyNow";
+import Mycard from "./../Pages/Mycard";
+import AboutUs from "./../Components/AboutUs";
 import BigBlog from "./../Components/BigBlog.";
-import Myorder from "../Dashbord/Myorder";
-import Myrecipe from "../Components/Myrecipe";
-import Totalrecipes from "../Dashbord/Totalrecipes";
-import PrivateRoute from "../PrivetRoute/PrivetRout";
-import BeARider from "../Pages/BeARider";
-import PendingRiders from "../Pages/Dashbord/PendingRiders";
-import MakeAdmin from "../Dashbord/MakeAdmin";
+import Login from "./../Pages/Login";
+import Register from "./../Pages/Register";
 
-// import MyParcel from "../Dashbord/Card/MyParcel";
-
+import DashbordHome from "./../admin/DashbordHome";
+import Allparcle from "./../admin/Allparcle";
+import Totalrecipes from "./../admin/Totalrecipes";
+import MyParcel from "./../Users/MyParcel";
+import Myorder from "./../Users/Myorder";
+import BeARider from "./../Rider/BeARider";
+import AdminRoute from "./../PrivetRoute/AdminRoute";
+import PendingRiders from "./../admin/PendingRiders";
+import MakeAdmin from "./../admin/MakeAdmin";
+import Myrecipe from "./../Components/Myrecipe";
+import Admin from "../admin/Admin";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -38,9 +36,9 @@ export const router = createBrowserRouter([
       {
         path: "addrecipes",
         element: (
-          <PrivetRout>
+          <PrivateRoute>
             <AddRecipe />
-          </PrivetRout>
+          </PrivateRoute>
         ),
       },
 
@@ -92,7 +90,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "Addpercel",
-        Component: Addpercel,
+        Component: AddParcel,
         loader: () => fetch("/warehouses.json"),
       },
       {
@@ -104,18 +102,14 @@ export const router = createBrowserRouter([
       {
         path: "myrecipes",
         element: (
-          <PrivetRout>
+          <PrivateRoute>
             <Myrecipe />
-          </PrivetRout>
+          </PrivateRoute>
         ),
       },
       {
         path: "totalRecipes",
-        element: (
-          <PrivetRout>
-            <Totalrecipes />
-          </PrivetRout>
-        ),
+        element: <Totalrecipes />,
       },
 
       {
@@ -140,7 +134,9 @@ export const router = createBrowserRouter([
 
         element: (
           <PrivateRoute>
-            <PendingRiders />
+            <AdminRoute>
+              <PendingRiders />
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
@@ -148,7 +144,10 @@ export const router = createBrowserRouter([
         path: "makeAdmin",
         element: (
           <PrivateRoute>
-            <MakeAdmin />
+            <AdminRoute>
+              {" "}
+              <MakeAdmin />
+            </AdminRoute>
           </PrivateRoute>
         ),
       },

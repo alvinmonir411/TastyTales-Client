@@ -2,10 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router";
-import { AuthContext } from "../Auth/AuthProvider";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import CheckoutForm from "../stripeform/CheckoutForm";
+import { AuthContext } from "../Auth/AuthProvider";
 
 // Initialize Stripe with your public key
 const stripePromise = loadStripe(

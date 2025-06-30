@@ -1,44 +1,40 @@
-
 import React, { useContext } from "react";
 import { motion } from "framer-motion";
-import { AuthContext } from "../Auth/AuthProvider";
+
 import { object } from "framer-motion/client";
 import axios, { Axios } from "axios";
 import { toast } from "react-toastify";
+import { AuthContext } from "../Auth/AuthProvider";
 
 const AddRecipe = () => {
   const { user } = useContext(AuthContext);
   const handleaddrecipe = (e) => {
-    e.preventDefault()
-    
-    
+    e.preventDefault();
+
     const form = e.target;
-    const formdata = new FormData(form)
-    const data = Object.fromEntries(formdata.entries())
-    const Tags = data.tags.split(',').map(tag => tag.trim())
+    const formdata = new FormData(form);
+    const data = Object.fromEntries(formdata.entries());
+    const Tags = data.tags.split(",").map((tag) => tag.trim());
     data.tags = Tags;
     const Ingredients = data.ingredients
       .split(",")
       .map((ingredient) => ingredient.trim());
     data.ingredients = Ingredients;
 
-const Instructions = data.instructions.split(",").map((instr) => instr.trim());
-data.instructions= Instructions
-
-
+    const Instructions = data.instructions
+      .split(",")
+      .map((instr) => instr.trim());
+    data.instructions = Instructions;
 
     axios
-      .post(`${import.meta.env.VITE_URL}addrecipe` ,data)
+      .post(`${import.meta.env.VITE_URL}addrecipe`, data)
       .then((response) => {
-        toast.success('dones');
+        toast.success("dones");
       })
       .catch((error) => {
         console.error("Error:", error);
       });
-
-
-  }
-
+  };
 
   return (
     <div>

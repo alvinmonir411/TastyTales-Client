@@ -1,11 +1,11 @@
-import React, { use } from 'react';
+import React, { use } from "react";
 
-import { motion } from 'framer-motion';
-import { Link } from 'react-router';
-import { CardContext } from '../Auth/Cardprover';
+import { motion } from "framer-motion";
+import { Link } from "react-router";
+import { CardContext } from "./../Auth/Cardprover";
 
 const Mycard = () => {
-  const { cardData } = use(CardContext)
+  const { cardData } = use(CardContext);
 
   return (
     <motion.div
@@ -67,6 +67,3 @@ const Mycard = () => {
 };
 
 export default Mycard;
-
-
-

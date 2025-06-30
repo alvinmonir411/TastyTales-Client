@@ -5,7 +5,7 @@ import { useLoaderData } from "react-router";
 import { toast } from "react-toastify";
 import { AuthContext } from "../Auth/AuthProvider";
 
-const BeARiderForm = () => {
+const BeARider = () => {
   const districtData = useLoaderData();
   const [loading, setLoading] = useState(false);
   const { user } = use(AuthContext);
@@ -263,4 +263,4 @@ const BeARiderForm = () => {
   );
 };
 
-export default BeARiderForm;
+export default BeARider;

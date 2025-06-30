@@ -1,10 +1,11 @@
 import React, { useContext, useState } from "react";
 import { BsGoogle } from "react-icons/bs";
-import { AuthContext } from "../Auth/AuthProvider";
+
 import { toast } from "react-toastify";
 import { useNavigate, NavLink } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
+import { AuthContext } from "../Auth/AuthProvider";
 
 const Login = () => {
   const { handlegooglelogin, setuser, handleloginwitheamil } =

@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { AuthContext } from "../Auth/AuthProvider";
+
 import { motion } from "framer-motion";
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
+import { AuthContext } from "../Auth/AuthProvider";
 
 const Totalrecipes = () => {
   const { user } = useContext(AuthContext);
