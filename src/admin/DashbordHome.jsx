@@ -1,12 +1,13 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import CountUp from 'react-countup';
-import { MdEqualizer } from 'react-icons/md';
-import { NavLink } from 'react-router';
-import { motion } from 'framer-motion';
-import { FiPackage } from 'react-icons/fi';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import CountUp from "react-countup";
+import { MdEqualizer } from "react-icons/md";
+import { NavLink } from "react-router";
+import { motion } from "framer-motion";
+import { FiPackage } from "react-icons/fi";
+import axiosSecure from "../axiosSecure";
 const DashbordHome = () => {
-  const [totaldata,settotaldata]= useState([])
+  const [totaldata, settotaldata] = useState([]);
   const [sellar, setSeller] = useState([]);
   const [totalparcle, settotalparcle] = useState([]);
 
@@ -14,14 +15,14 @@ const DashbordHome = () => {
     const fetchData = async () => {
       try {
         const [recipeRes, authorRes, parcelRes] = await Promise.all([
-          axios.get(`${import.meta.env.VITE_URL}allrecipe/admin`),
-          axios.get(`${import.meta.env.VITE_URL}uniqueauthors`),
-          axios.get(`${import.meta.env.VITE_URL}parcels`),
+          axiosSecure.get(`allrecipe/admin`),
+          axiosSecure.get(`uniqueauthors`),
+          axiosSecure.get(`parcels`),
         ]);
 
         settotaldata(recipeRes.data);
         setSeller(authorRes.data);
-        settotalparcle(parcelRes.data); 
+        settotalparcle(parcelRes.data);
       } catch (error) {
         console.error("Error fetching data:", error.message);
       }
@@ -29,8 +30,6 @@ const DashbordHome = () => {
 
     fetchData();
   }, []);
-  
-
 
   return (
     <motion.div className="w-[80vw] m-10  mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-center items-center gap-10 capitalize">
@@ -70,6 +69,6 @@ const DashbordHome = () => {
       </div>
     </motion.div>
   );
-}
+};
 
-export default DashbordHome
+export default DashbordHome;

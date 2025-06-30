@@ -24,6 +24,8 @@ import PendingRiders from "./../admin/PendingRiders";
 import MakeAdmin from "./../admin/MakeAdmin";
 import Myrecipe from "./../Components/Myrecipe";
 import Admin from "../admin/Admin";
+import axiosSecure from "./../axiosSecure";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -96,7 +98,6 @@ export const router = createBrowserRouter([
       {
         path: "AllParcel",
         Component: Allparcle,
-        loader: () => fetch(`${import.meta.env.VITE_URL}parcels`),
       },
 
       {

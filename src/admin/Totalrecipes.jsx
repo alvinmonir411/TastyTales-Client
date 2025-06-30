@@ -4,6 +4,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import { AuthContext } from "../Auth/AuthProvider";
+import axiosSecure from "../axiosSecure";
 
 const Totalrecipes = () => {
   const { user } = useContext(AuthContext);
@@ -12,8 +13,8 @@ const Totalrecipes = () => {
 
   // Fetch all recipes (admin)
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_URL}allrecipe/admin`)
+    axiosSecure
+      .get(`allrecipe/admin`)
       .then((res) => {
         setRecipes(res.data);
         setLoading(false);

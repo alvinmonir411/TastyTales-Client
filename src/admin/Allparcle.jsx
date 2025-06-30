@@ -1,13 +1,26 @@
-import React, { useState } from "react";
-import { useLoaderData } from "react-router"; 
+import React, { useEffect, useState } from "react";
+import { useLoaderData } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import Swal from "sweetalert2";
 import { FiEdit, FiEye, FiTrash2 } from "react-icons/fi";
 import axios from "axios"; // fixed axios import
+import axiosSecure from "../axiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
 const Allparcle = () => {
-  const loadedParcels = useLoaderData();
-  const [parcels, setParcels] = useState(loadedParcels || []);
+  const {
+    data: parcels,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["parcels"],
+    queryFn: async () => {
+      const res = await axiosSecure("parcels");
+      return res.data;
+    },
+  });
+
+  console.log(parcels);
 
   const handleEdit = (id) => {
     Swal.fire({
@@ -38,7 +51,7 @@ const Allparcle = () => {
 
     if (result.isConfirmed) {
       axios
-        .delete(`${import.meta.env.VITE_URL}parcle/${id}`) 
+        .delete(`${import.meta.env.VITE_URL}parcle/${id}`)
         .then(() => {
           setParcels(parcels.filter((parcel) => parcel._id !== id));
           Swal.fire("Deleted!", "Your parcel has been deleted.", "success");
@@ -48,14 +61,18 @@ const Allparcle = () => {
         });
     }
   };
-
+  if (isLoading) {
+    console.log("Loading...");
+  } else if (error) {
+    console.error("Error fetching parcels:", error);
+  }
   return (
     <div className="w-full mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">
         All Parcels
       </h1>
 
-      {parcels.length === 0 ? (
+      {parcels?.length === 0 ? (
         <p className="text-center text-gray-500">No parcels available.</p>
       ) : (
         <div className="overflow-x-auto border rounded-lg shadow">
@@ -93,7 +110,7 @@ const Allparcle = () => {
             </thead>
             <AnimatePresence>
               <tbody className="bg-white divide-y divide-gray-200">
-                {parcels.map((parcel) => (
+                {parcels?.map((parcel) => (
                   <motion.tr
                     key={parcel._id}
                     initial={{ opacity: 0, y: 20 }}

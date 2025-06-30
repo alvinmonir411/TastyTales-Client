@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { debounce } from "lodash";
 import { toast } from "react-toastify";
+import axiosSecure from "../axiosSecure";
 
 const MakeAdmin = () => {
   const [query, setQuery] = useState("");
@@ -15,9 +16,7 @@ const MakeAdmin = () => {
     }
 
     try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_URL}users/search?q=${searchTerm}`
-      );
+      const res = await axiosSecure.get(`users/search?q=${searchTerm}`);
       setMatchedUsers(res.data);
     } catch (err) {
       console.error("Error fetching users:", err);

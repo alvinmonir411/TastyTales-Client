@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { BsGoogle } from "react-icons/bs";
-
 import { toast } from "react-toastify";
 import { useNavigate, NavLink } from "react-router-dom";
 import axios from "axios";
@@ -8,10 +7,8 @@ import { motion } from "framer-motion";
 import { AuthContext } from "../Auth/AuthProvider";
 
 const Login = () => {
-  const { handlegooglelogin, setuser, handleloginwitheamil } =
-    useContext(AuthContext);
+  const { handlegooglelogin, setuser, handlelogin } = useContext(AuthContext);
   const navigate = useNavigate();
-
   const [loading, setLoading] = useState(false);
 
   const handleEmailLoginSubmit = (e) => {
@@ -21,30 +18,16 @@ const Login = () => {
     const password = form.password.value;
 
     setLoading(true);
-    handleloginwitheamil(email, password)
+
+    handlelogin(email, password)
       .then((data) => {
         const user = data.user;
         setuser(user);
 
-        // Save user to MongoDB
-        const userInfo = {
-          name: user.displayName || "",
-          email: user.email,
-          photoURL: user.photoURL || "",
-          role: "user",
-        };
-
-        axios
-          .post(`${import.meta.env.VITE_URL}users`, userInfo)
-          .then(() => {
-            toast.success(
-              `Welcome back${user.displayName ? `, ${user.displayName}` : ""}!`
-            );
-            navigate("/");
-          })
-          .catch(() => {
-            toast.error("Failed to save user to database");
-          });
+        toast.success(
+          `Welcome back${user.displayName ? `, ${user.displayName}` : ""}!`
+        );
+        navigate("/");
       })
       .catch(() => {
         toast.error("Invalid email or password");
