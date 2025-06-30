@@ -51,13 +51,26 @@ const PendingRiders = () => {
       toast.error("Failed to approve rider");
     },
   });
+  const declineMutation = useMutation({
+    mutationFn: (riderId) =>
+      axios.delete(`${import.meta.env.VITE_URL}riders/${riderId}`),
+    onSuccess: () => {
+      toast.info("Rider declined successfully");
+      queryClient.invalidateQueries(["pendingRiders"]); // refetch list
+    },
+    onError: () => {
+      toast.error("Failed to decline rider");
+    },
+  });
 
+  // Function to call on button click
+  const handleDecline = (riderId) => {
+    declineMutation.mutate(riderId);
+  };
   const handleApprove = (riderId) => {
     approveMutation.mutate(riderId);
   };
-  const handleDecline = (riderId) => {
-    console.log(riderId);
-  };
+ 
 
   if (isLoading) {
     return (

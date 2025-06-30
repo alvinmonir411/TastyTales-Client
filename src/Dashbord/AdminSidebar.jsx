@@ -41,7 +41,16 @@ const AdminSidebar = () => {
           </li>
         )}
         <li>
-          {" "}
+          <NavLink
+            className={({ isActive }) =>
+              isActive ? "text-blue-500 underline" : ""
+            }
+            to="makeAdmin"
+          >
+            📦 Make Admin
+          </NavLink>
+        </li>
+        <li>
           <NavLink
             className={({ isActive }) =>
               isActive ? "text-blue-500 underline" : ""

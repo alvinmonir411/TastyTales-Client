@@ -22,6 +22,7 @@ import Totalrecipes from "../Dashbord/Totalrecipes";
 import PrivateRoute from "../PrivetRoute/PrivetRout";
 import BeARider from "../Pages/BeARider";
 import PendingRiders from "../Pages/Dashbord/PendingRiders";
+import MakeAdmin from "../Dashbord/MakeAdmin";
 
 // import MyParcel from "../Dashbord/Card/MyParcel";
 
@@ -140,6 +141,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <PendingRiders />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "makeAdmin",
+        element: (
+          <PrivateRoute>
+            <MakeAdmin />
           </PrivateRoute>
         ),
       },
