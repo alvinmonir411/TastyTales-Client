@@ -3,6 +3,11 @@ import { createContext, useState } from "react";
 export const AuthContext = createContext();
 import {createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile} from 'firebase/auth'
 import { auth } from './../Firebase.init';
+
+
+
+
+
 const AuthProvider = ({ children }) => {
   const [user, setuser] = useState(null);
   const [loading,setloading] = useState(true)

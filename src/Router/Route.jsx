@@ -25,6 +25,8 @@ import MakeAdmin from "./../admin/MakeAdmin";
 import Myrecipe from "./../Components/Myrecipe";
 import Admin from "../admin/Admin";
 import axiosSecure from "./../axiosSecure";
+import OrderTable from "../admin/OrderTable";
+import RiderOrdersTable from "../Rider/RiderOrdersTable";
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +57,7 @@ export const router = createBrowserRouter([
       {
         path: "buynow/:id",
         Component: BuyNow,
+        loader: () => fetch("/warehouses.json"),
       },
       {
         path: "mycard",
@@ -99,7 +102,10 @@ export const router = createBrowserRouter([
         path: "AllParcel",
         Component: Allparcle,
       },
-
+      {
+        path: "riderOrdersTable",
+        Component: RiderOrdersTable,
+      },
       {
         path: "myrecipes",
         element: (
@@ -148,6 +154,17 @@ export const router = createBrowserRouter([
             <AdminRoute>
               {" "}
               <MakeAdmin />
+            </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "orderTable",
+
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <OrderTable />
             </AdminRoute>
           </PrivateRoute>
         ),

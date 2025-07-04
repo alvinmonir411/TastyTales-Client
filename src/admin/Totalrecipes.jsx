@@ -4,13 +4,13 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import { AuthContext } from "../Auth/AuthProvider";
-import axiosSecure from "../axiosSecure";
+import useAxiosSecure from "../axiosSecure";
 
 const Totalrecipes = () => {
   const { user } = useContext(AuthContext);
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const axiosSecure = useAxiosSecure();
   // Fetch all recipes (admin)
   useEffect(() => {
     axiosSecure

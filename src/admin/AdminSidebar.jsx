@@ -42,7 +42,17 @@ const AdminSidebar = () => {
               >
                 📦 Make Admin
               </NavLink>
-            </li>{" "}
+            </li>
+            <li>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "text-blue-500 underline" : ""
+                }
+                to="orderTable"
+              >
+                📦 Order Table
+              </NavLink>
+            </li>
             <li>
               <NavLink
                 className={({ isActive }) =>
@@ -137,6 +147,16 @@ const AdminSidebar = () => {
                 to="beARider"
               >
                 📦 Be A Rider
+              </NavLink>
+            </li>{" "}
+            <li>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive ? "text-blue-500 underline" : ""
+                }
+                to="riderOrdersTable"
+              >
+                📦 My delivary{" "}
               </NavLink>
             </li>
             <li>

@@ -61,7 +61,11 @@ const Register = () => {
       setuser({ ...user, displayName: name, photoURL });
 
       // ✅ Save to MongoDB
-      await axios.post(`${import.meta.env.VITE_URL}users`, userInfo);
+      await axios
+        .post(`${import.meta.env.VITE_URL}users`, userInfo)
+        .then((res) => {
+          console.log(res.data);
+        });
 
       toast.success(`Welcome ${name}`);
       navigate("/");
@@ -92,7 +96,8 @@ const Register = () => {
             toast.success(`Welcome ${user.displayName}`);
             navigate("/");
           })
-          .catch(() => {
+          .catch((Error) => {
+            console.log(Error);
             toast.error("Failed to save user to database");
           });
       })

@@ -15,9 +15,9 @@ const DashbordHome = () => {
     const fetchData = async () => {
       try {
         const [recipeRes, authorRes, parcelRes] = await Promise.all([
-          axiosSecure.get(`allrecipe/admin`),
-          axiosSecure.get(`uniqueauthors`),
-          axiosSecure.get(`parcels`),
+          axiosSecure(`allrecipe/admin`),
+          axiosSecure(`uniqueauthors`),
+          axiosSecure(`parcels`),
         ]);
 
         settotaldata(recipeRes.data);

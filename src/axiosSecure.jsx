@@ -1,29 +1,33 @@
+// src/hooks/useAxiosSecure.js
+import { useEffect } from "react";
 import axios from "axios";
-import { getIdToken, onAuthStateChanged } from "firebase/auth";
+import { getIdToken } from "firebase/auth";
 import { auth } from "./Firebase.init";
 
 const axiosSecure = axios.create({
   baseURL: import.meta.env.VITE_URL,
 });
 
-let token = null;
+const useAxiosSecure = () => {
+  useEffect(() => {
+    const requestInterceptor = axiosSecure.interceptors.request.use(
+      async (config) => {
+        const user = auth.currentUser;
+        if (user) {
+          const token = await getIdToken(user);
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
 
-// Wait for user to be ready
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    token = await getIdToken(user);
-  }
-});
+    return () => {
+      axiosSecure.interceptors.request.eject(requestInterceptor);
+    };
+  }, []);
 
-// Interceptor
-axiosSecure.interceptors.request.use(
-  (config) => {
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+  return axiosSecure;
+};
 
-export default axiosSecure;
+export default useAxiosSecure;

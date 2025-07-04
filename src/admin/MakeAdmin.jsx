@@ -20,6 +20,7 @@ const MakeAdmin = () => {
       setMatchedUsers(res.data);
     } catch (err) {
       console.error("Error fetching users:", err);
+      
     }
   }, 300);
 
