@@ -83,9 +83,9 @@ const OrderTable = () => {
             <tr key={order._id}>
               <td>{index + 1}</td>
               <td>{order.title}</td>
-              <td>{order.buyerInfo?.name}</td>
+              <td>{order.buyerInfo?.email}</td>
               <td>{order.buyerInfo?.phone}</td>
-              <td>{order.buyerInfo?.address}</td>
+              <td>{order.buyerInfo?.district}</td>
               <td>${parseFloat(order.totalPrice).toFixed(2)}</td>
               <td className="capitalize text-success">{order.paymentStatus}</td>
               <td className="flex gap-2 justify-center">

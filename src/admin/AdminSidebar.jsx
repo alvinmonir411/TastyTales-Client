@@ -1,178 +1,167 @@
-import React, { use } from "react";
-import { NavLink } from "react-router";
-import { AuthContext } from "./../Auth/AuthProvider";
-import useUserRole from "./../Hooks/useUserRole";
+import React, { useContext } from "react";
+import { NavLink } from "react-router-dom";
+import { AuthContext } from "../Auth/AuthProvider";
+import useUserRole from "../Hooks/useUserRole";
 
 const AdminSidebar = () => {
-  const { user } = use(AuthContext);
+  const { user } = useContext(AuthContext);
   const { role } = useUserRole(user?.email);
-  console.log(role);
+
   return (
-    <aside className="w-64 bg-base-200 text-base-content overflow-y-hidden-hidden  p-5 ">
-      <h2 className="text-2xl font-bold text-blue-600 mb-6">Admin Panel</h2>
+    <aside className="w-64 bg-base-200 text-base-content p-5">
+      <h2 className="text-2xl font-bold text-blue-600 mb-6 capitalize">
+        {role} Panel
+      </h2>
       <ul className="menu space-y-1">
+        {/* Common Home link */}
+        <li>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive ? "text-blue-500 underline" : ""
+            }
+          >
+            🏠 Home
+          </NavLink>
+        </li>
+
+        {/* Admin Routes */}
         {role === "admin" && (
           <>
             <li>
               <NavLink
-                className={({ isActive }) =>
-                  isActive ? "text-blue-500 underline" : ""
-                }
-                to="/"
-              >
-                🏠 Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? "text-blue-500 underline" : ""
-                }
                 to="dashbord"
-              >
-                🏠 Dashbord Home
-              </NavLink>
-            </li>{" "}
-            <li>
-              <NavLink
                 className={({ isActive }) =>
                   isActive ? "text-blue-500 underline" : ""
                 }
+              >
+                📊 Dashboard Home
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
                 to="makeAdmin"
+                className={({ isActive }) =>
+                  isActive ? "text-blue-500 underline" : ""
+                }
               >
-                📦 Make Admin
+                👑 Make Admin
               </NavLink>
             </li>
             <li>
               <NavLink
-                className={({ isActive }) =>
-                  isActive ? "text-blue-500 underline" : ""
-                }
                 to="orderTable"
+                className={({ isActive }) =>
+                  isActive ? "text-blue-500 underline" : ""
+                }
               >
-                📦 Order Table
+                📋 Order Table
               </NavLink>
             </li>
             <li>
               <NavLink
+                to="AllParcel"
                 className={({ isActive }) =>
                   isActive ? "text-blue-500 underline" : ""
                 }
-                to="AllParcel"
               >
                 📦 All Parcel
               </NavLink>
             </li>
             <li>
               <NavLink
+                to="totalRecipes"
                 className={({ isActive }) =>
                   isActive ? "text-blue-500 underline" : ""
                 }
-                to="totalRecipes"
               >
-                📋 Total Recipes
+                🍽 Total Recipes
               </NavLink>
             </li>
             <li>
               <NavLink
+                to="pendingRiders"
                 className={({ isActive }) =>
                   isActive ? "text-blue-500 underline" : ""
                 }
-                to="pendingRiders"
               >
-                📦 Pending Riders
+                🕒 Pending Riders
               </NavLink>
             </li>
           </>
         )}
-        {/* for user */}
 
+        {/* User Routes */}
         {role === "user" && (
           <>
             <li>
               <NavLink
-                className={({ isActive }) =>
-                  isActive ? "text-blue-500 underline" : ""
-                }
-                to="/"
-              >
-                🏠 Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? "text-blue-500 underline" : ""
-                }
                 to="Addpercel"
+                className={({ isActive }) =>
+                  isActive ? "text-blue-500 underline" : ""
+                }
               >
-                📦 Add Parcel
+                ➕ Add Parcel
               </NavLink>
             </li>
             <li>
               <NavLink
+                to="myorder"
                 className={({ isActive }) =>
                   isActive ? "text-blue-500 underline" : ""
                 }
-                to="myorder"
               >
                 📦 My Order
               </NavLink>
             </li>
             <li>
               <NavLink
-                className={({ isActive }) =>
-                  isActive ? "text-blue-500 underline" : ""
-                }
                 to="myrecipes"
+                className={({ isActive }) =>
+                  isActive ? "text-blue-500 underline" : ""
+                }
               >
-                🍳 My Recipe
+                🍳 My Recipes
               </NavLink>
             </li>
             <li>
               <NavLink
-                className={({ isActive }) =>
-                  isActive ? "text-blue-500 underline" : ""
-                }
-                to="/"
-              >
-                🏠 Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? "text-blue-500 underline" : ""
-                }
-                to="beARider"
-              >
-                📦 Be A Rider
-              </NavLink>
-            </li>{" "}
-            <li>
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? "text-blue-500 underline" : ""
-                }
-                to="riderOrdersTable"
-              >
-                📦 My delivary{" "}
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                className={({ isActive }) =>
-                  isActive ? "text-blue-500 underline" : ""
-                }
                 to="myparcle"
+                className={({ isActive }) =>
+                  isActive ? "text-blue-500 underline" : ""
+                }
               >
-                📦 My Parcle
+                📦 My Parcel
               </NavLink>
             </li>
           </>
         )}
-        {/* {for seler} */}
-        {role === "seller" && <> </>}
+
+        {/* Rider Routes (show only if role is "rider") */}
+        {role === "rider" && (
+          <>
+            <li>
+              <NavLink
+                to="beARider"
+                className={({ isActive }) =>
+                  isActive ? "text-blue-500 underline" : ""
+                }
+              >
+                🛵 Be a Rider
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="riderOrdersTable"
+                className={({ isActive }) =>
+                  isActive ? "text-blue-500 underline" : ""
+                }
+              >
+                📦 My Deliveries
+              </NavLink>
+            </li>
+          </>
+        )}
       </ul>
     </aside>
   );
