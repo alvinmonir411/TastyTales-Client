@@ -59,9 +59,6 @@ const BuyNow = () => {
     }
   }, [recipe, reset]);
 
-  if (!user || !recipe)
-    return <div className="text-center py-20">Loading...</div>;
-
   const quantity = watch("quantity") || 1;
   const location = watch("location") || "inside";
   const unitPrice = recipe?.price || 0;

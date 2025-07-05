@@ -5,19 +5,21 @@ import { MdEqualizer } from "react-icons/md";
 import { NavLink } from "react-router";
 import { motion } from "framer-motion";
 import { FiPackage } from "react-icons/fi";
-import axiosSecure from "../axiosSecure";
+import useAxiosSecure from "../axiosSecure";
+
 const DashbordHome = () => {
+  const axiosSecure = useAxiosSecure();
   const [totaldata, settotaldata] = useState([]);
   const [sellar, setSeller] = useState([]);
   const [totalparcle, settotalparcle] = useState([]);
-
+  console.log(totaldata);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [recipeRes, authorRes, parcelRes] = await Promise.all([
-          axiosSecure(`allrecipe/admin`),
-          axiosSecure(`uniqueauthors`),
-          axiosSecure(`parcels`),
+          axiosSecure.get(`allrecipe/admin`),
+          axiosSecure.get(`uniqueauthors`),
+          axiosSecure.get(`parcels`),
         ]);
 
         settotaldata(recipeRes.data);

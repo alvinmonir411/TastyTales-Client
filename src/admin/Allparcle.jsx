@@ -1,26 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { useLoaderData } from "react-router";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Swal from "sweetalert2";
 import { FiEdit, FiEye, FiTrash2 } from "react-icons/fi";
-import axios from "axios"; // fixed axios import
-import axiosSecure from "../axiosSecure";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import useAxiosSecure from "../axiosSecure";
 
 const Allparcle = () => {
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
+
   const {
-    data: parcels,
+    data: parcels = [],
     isLoading,
     error,
   } = useQuery({
     queryKey: ["parcels"],
     queryFn: async () => {
-      const res = await axiosSecure("parcels");
+      const res = await axiosSecure.get("/parcels");
       return res.data;
     },
   });
-
-  console.log(parcels);
 
   const handleEdit = (id) => {
     Swal.fire({
@@ -50,22 +49,32 @@ const Allparcle = () => {
     });
 
     if (result.isConfirmed) {
-      axios
-        .delete(`${import.meta.env.VITE_URL}parcle/${id}`)
-        .then(() => {
-          setParcels(parcels.filter((parcel) => parcel._id !== id));
-          Swal.fire("Deleted!", "Your parcel has been deleted.", "success");
-        })
-        .catch(() => {
-          Swal.fire("Error", "Failed to delete parcel.", "error");
-        });
+      try {
+        await axiosSecure.delete(`parcels/${id}`); // Make sure this route is correct in backend
+        await queryClient.invalidateQueries(["parcels"]);
+        Swal.fire("Deleted!", "Your parcel has been deleted.", "success");
+      } catch (error) {
+        Swal.fire("Error", "Failed to delete parcel.", "error");
+      }
     }
   };
+
   if (isLoading) {
-    console.log("Loading...");
-  } else if (error) {
-    console.error("Error fetching parcels:", error);
+    return (
+      <p className="text-center text-blue-600 font-medium py-10">
+        Loading parcels...
+      </p>
+    );
   }
+
+  if (error) {
+    return (
+      <p className="text-center text-red-600 font-medium py-10">
+        Error loading parcels.
+      </p>
+    );
+  }
+
   return (
     <div className="w-full mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">
@@ -110,7 +119,7 @@ const Allparcle = () => {
             </thead>
             <AnimatePresence>
               <tbody className="bg-white divide-y divide-gray-200">
-                {parcels?.map((parcel) => (
+                {parcels.map((parcel) => (
                   <motion.tr
                     key={parcel._id}
                     initial={{ opacity: 0, y: 20 }}
@@ -119,30 +128,28 @@ const Allparcle = () => {
                     transition={{ duration: 0.3 }}
                     className="hover:bg-blue-50"
                   >
-                    <td className="px-4 py-3 whitespace-nowrap font-medium text-gray-800">
+                    <td className="px-4 py-3 font-medium text-gray-800">
                       {parcel.title}
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                    <td className="px-4 py-3 text-sm text-gray-600">
                       {parcel.tracking_id}
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                    <td className="px-4 py-3 text-sm text-gray-600">
                       <div>{parcel.sender_name || parcel.sender_email}</div>
                       <div className="text-xs text-gray-500">
                         {parcel.sender_district}, {parcel.sender_region}
                       </div>
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                    <td className="px-4 py-3 text-sm text-gray-600">
                       <div>{parcel.receiver_name}</div>
                       <div className="text-xs text-gray-500">
                         {parcel.receiver_district}, {parcel.receiver_region}
                       </div>
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      {parcel.delivery_cost}৳
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap capitalize">
+                    <td className="px-4 py-3">{parcel.delivery_cost}৳</td>
+                    <td className="px-4 py-3 capitalize">
                       <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        className={`px-2 inline-flex text-xs font-semibold rounded-full ${
                           parcel.delivery_status === "pending"
                             ? "bg-yellow-100 text-yellow-800"
                             : parcel.delivery_status === "delivered"
@@ -153,9 +160,9 @@ const Allparcle = () => {
                         {parcel.delivery_status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap capitalize">
+                    <td className="px-4 py-3 capitalize">
                       <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        className={`px-2 inline-flex text-xs font-semibold rounded-full ${
                           parcel.payment_status === "unpaid"
                             ? "bg-red-100 text-red-800"
                             : "bg-green-100 text-green-800"
@@ -164,28 +171,25 @@ const Allparcle = () => {
                         {parcel.payment_status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-4 py-3 text-sm text-gray-500">
                       {new Date(parcel.creation_date).toLocaleString()}
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-center space-x-3">
+                    <td className="px-4 py-3 text-center space-x-3">
                       <button
                         onClick={() => handleView(parcel._id)}
                         className="text-gray-600 hover:text-gray-800"
-                        type="button"
                       >
                         <FiEye size={18} />
                       </button>
                       <button
                         onClick={() => handleEdit(parcel._id)}
                         className="text-blue-600 hover:text-blue-800"
-                        type="button"
                       >
                         <FiEdit size={18} />
                       </button>
                       <button
                         onClick={() => handleDelete(parcel._id)}
                         className="text-red-600 hover:text-red-800"
-                        type="button"
                       >
                         <FiTrash2 size={18} />
                       </button>
