@@ -99,17 +99,3 @@ Moniruzzaman (Alvin Monir)
 
 📄 License
 This project is licensed for educational and portfolio use. For production/commercial use, please contact the author.
-
-If you'd like this automatically committed to your repo or want a matching server-side README, just let me know.
-
-vbnet
-Copy
-Edit
-
----
-
-### ✅ Next Steps:
-1. **Want me to save this as a `.md` file** you can directly upload?
-2. Or would you like step-by-step help adding this to GitHub (via `git add`, `commit`, `push`)?
-
-Let me know if you want a custom banner image or demo GIF as well — it’ll make the repo stand out beautifully.
